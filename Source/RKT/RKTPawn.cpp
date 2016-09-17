@@ -39,7 +39,7 @@ ARKTPawn::ARKTPawn()
 	Acceleration = 500.f;
 	TurnSpeed = 50.f;
 	MaxSpeed = 4000.f;
-	MinSpeed = 500.f;
+	MinSpeed = 2000.f;
 	CurrentForwardSpeed = 500.f;
 }
 
@@ -47,7 +47,7 @@ void ARKTPawn::Tick(float DeltaSeconds)
 {
 	const FVector LocalMove = FVector(CurrentForwardSpeed * DeltaSeconds, 0.f, 0.f);
 
-	// Move plan forwards (with sweep so we stop when we collide with things)
+	// Move plane forwards (with sweep so we stop when we collide with things)
 	AddActorLocalOffset(LocalMove, true);
 
 	// Calculate change in rotation this frame
@@ -120,8 +120,10 @@ void ARKTPawn::MoveRightInput(float Val)
 
 	// If turning, yaw value is used to influence roll
 	// If not turning, roll to reverse current roll value
+	//TODO look into formula change to eliminate usage of Roll values completely
 	float TargetRollSpeed = bIsTurning ? (CurrentYawSpeed * 0.5f) : (GetActorRotation().Roll * -2.f);
 
 	// Smoothly interpolate roll speed
-	CurrentRollSpeed = FMath::FInterpTo(CurrentRollSpeed, TargetRollSpeed, GetWorld()->GetDeltaSeconds(), 2.f);
+	/// CurrentRollSpeed Commented out  to see effect
+	///CurrentRollSpeed = FMath::FInterpTo(CurrentRollSpeed, TargetRollSpeed, GetWorld()->GetDeltaSeconds(), 2.f);
 }
