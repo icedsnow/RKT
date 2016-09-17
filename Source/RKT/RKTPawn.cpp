@@ -41,6 +41,11 @@ ARKTPawn::ARKTPawn()
 	MaxSpeed = 4000.f;
 	MinSpeed = 2000.f;
 	CurrentForwardSpeed = 500.f;
+
+	///***********MAXPITCH
+	MaxPitch = 15.f;
+	MinPitch = -10.f;
+	///***********MAXPITCH
 }
 
 void ARKTPawn::Tick(float DeltaSeconds)
@@ -49,10 +54,21 @@ void ARKTPawn::Tick(float DeltaSeconds)
 
 	// Move plane forwards (with sweep so we stop when we collide with things)
 	AddActorLocalOffset(LocalMove, true);
-
+	
+	///*********MAXPITCH
+	const float OldPitch = GetActorRotation().Pitch;
+	const float MinDeltaPitch = MinPitch - OldPitch;
+	const float MaxDeltaPitch = MaxPitch - OldPitch;
+	///*******MAXPITCH
+	
 	// Calculate change in rotation this frame
 	FRotator DeltaRotation(0,0,0);
-	DeltaRotation.Pitch = CurrentPitchSpeed * DeltaSeconds;
+	//OLD
+	//DeltaRotation.Pitch = CurrentPitchSpeed * DeltaSeconds;
+
+	///*********MAXPITCH
+	DeltaRotation.Pitch = FMath::ClampAngle(CurrentPitchSpeed * DeltaSeconds, MinDeltaPitch, MaxDeltaPitch);
+	///********MAXPITCH
 	DeltaRotation.Yaw = CurrentYawSpeed * DeltaSeconds;
 	DeltaRotation.Roll = CurrentRollSpeed * DeltaSeconds;
 
