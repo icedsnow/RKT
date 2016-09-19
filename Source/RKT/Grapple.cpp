@@ -134,18 +134,13 @@ const FHitResult UGrapple::GetFirstPhysicsBodyInReach()
 
 FVector UGrapple::GetReachLineStart()
 {
-	/*
-	FVector PlayerViewPointLocation;
 	
-	ACharacter* myCharacter = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
-	myCharacter->GetActorLocation();
-	*/
-	FVector PlayerViewPointLocation;
-	FRotator PlayerViewPointRotation;
-	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(
-		OUT    PlayerViewPointLocation,
-		OUT    PlayerViewPointRotation
-	);
+	//FVector PlayerViewPointLocation;
+	
+	//FVector GetActorLocation();
+	FVector PlayerViewPointLocation = GetWorld()->GetFirstPlayerController()->GetControlledPawn()->GetActorLocation();
+
+
 	return PlayerViewPointLocation;
 }
 
