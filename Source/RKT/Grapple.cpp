@@ -139,18 +139,23 @@ FVector UGrapple::GetReachLineStart()
 	
 	//FVector GetActorLocation();
 	FVector PlayerViewPointLocation = GetWorld()->GetFirstPlayerController()->GetControlledPawn()->GetActorLocation();
-
-
+	
 	return PlayerViewPointLocation;
 }
 
 FVector UGrapple::GetReachLineEnd()
 {
+	/*
 	FVector PlayerViewPointLocation;
 	FRotator PlayerViewPointRotation;
 	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(
 		OUT    PlayerViewPointLocation,
 		OUT    PlayerViewPointRotation
 	);
+	*/
+	FVector PlayerViewPointLocation = GetWorld()->GetFirstPlayerController()->GetControlledPawn()->GetActorLocation();
+	FRotator PlayerViewPointRotation = GetWorld()->GetFirstPlayerController()->GetControlledPawn()->GetActorRotation();
+	
+	//return PlayerViewPointLocation * Reach;
 	return PlayerViewPointLocation + PlayerViewPointRotation.Vector() * Reach;
 }
