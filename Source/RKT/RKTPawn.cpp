@@ -150,10 +150,11 @@ void ARKTPawn::MoveRightInput(float Val)
 
 	// If turning, yaw value is used to influence roll
 	// If not turning, roll to reverse current roll value
-	//TODO look into formula change to eliminate usage of Roll values completely
+	///ROLL has been constrained min, max = 0
 	float TargetRollSpeed = bIsTurning ? (CurrentYawSpeed * 0.5f) : (GetActorRotation().Roll * -2.f);
 
 	// Smoothly interpolate roll speed
 	/// CurrentRollSpeed Commented out  to see effect
+	///UPDATE: current edition works great, No noticeable effect uncommented with current changes, interps argueably less smooth with it in.
 	///CurrentRollSpeed = FMath::FInterpTo(CurrentRollSpeed, TargetRollSpeed, GetWorld()->GetDeltaSeconds(), 2.f);
 }
