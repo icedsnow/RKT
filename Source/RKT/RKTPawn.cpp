@@ -46,6 +46,11 @@ ARKTPawn::ARKTPawn()
 	MaxPitch = 15.f;
 	MinPitch = -10.f;
 	///***********MAXPITCH
+
+	///**********CONSTRAIN ROLL
+	MaxRoll = 0.f;
+	MinRoll = 0.f;
+	///**********CONSTRAIN ROLL
 }
 
 void ARKTPawn::Tick(float DeltaSeconds)
@@ -61,6 +66,12 @@ void ARKTPawn::Tick(float DeltaSeconds)
 	const float MaxDeltaPitch = MaxPitch - OldPitch;
 	///*******MAXPITCH
 	
+	///********CONSTRAIN ROLL
+	const float OldRoll = GetActorRotation().Roll;
+	const float MinDeltaRoll = MinRoll - OldRoll;
+	const float MaxDeltaRoll = MaxRoll - OldRoll;
+	///********CONSTRAIN ROLL
+
 	// Calculate change in rotation this frame
 	FRotator DeltaRotation(0,0,0);
 	//OLD
@@ -70,8 +81,11 @@ void ARKTPawn::Tick(float DeltaSeconds)
 	DeltaRotation.Pitch = FMath::ClampAngle(CurrentPitchSpeed * DeltaSeconds, MinDeltaPitch, MaxDeltaPitch);
 	///********MAXPITCH
 	DeltaRotation.Yaw = CurrentYawSpeed * DeltaSeconds;
-	DeltaRotation.Roll = CurrentRollSpeed * DeltaSeconds;
-
+	///TESTING physics while clamping angle on DeltaRotation.Roll actively
+	///DeltaRotation.Roll = CurrentRollSpeed * DeltaSeconds;
+	///********CONSTRAIN ROLL
+	DeltaRotation.Roll = FMath::ClampAngle(CurrentRollSpeed * DeltaSeconds, MinDeltaRoll, MaxDeltaRoll);
+	///********CONSTRAIN ROLL
 	// Rotate plane
 	AddActorLocalRotation(DeltaRotation);
 

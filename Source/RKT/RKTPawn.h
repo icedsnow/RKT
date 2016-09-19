@@ -68,6 +68,13 @@ private:
 	float MinPitch;
 	///**********MAXPITCH
 
+	///**********CONSTRAIN ROLL
+	UPROPERTY(Category = Roll, EditAnywhere)
+	float MaxRoll;
+
+	UPROPERTY(Category = Roll, EditAnywhere)
+	float MinRoll;
+	///**********CONSTRAIN ROLL
 	/** Current forward speed */
 	float CurrentForwardSpeed;
 
