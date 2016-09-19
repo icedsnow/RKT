@@ -87,6 +87,10 @@ private:
 	/** Current roll speed */
 	float CurrentRollSpeed;
 
+
+	///**********GRAPPLE
+
+
 public:
 	/** Returns PlaneMesh subobject **/
 	FORCEINLINE class UStaticMeshComponent* GetPlaneMesh() const { return PlaneMesh; }

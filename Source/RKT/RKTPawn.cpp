@@ -111,6 +111,7 @@ void ARKTPawn::SetupPlayerInputComponent(class UInputComponent* PlayerInputCompo
 	PlayerInputComponent->BindAxis("Thrust", this, &ARKTPawn::ThrustInput);
 	PlayerInputComponent->BindAxis("MoveUp", this, &ARKTPawn::MoveUpInput);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ARKTPawn::MoveRightInput);
+	//
 }
 
 void ARKTPawn::ThrustInput(float Val)
