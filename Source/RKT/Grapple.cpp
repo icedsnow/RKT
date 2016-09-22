@@ -4,6 +4,7 @@
 #include "Grapple.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "DrawDebugHelpers.h"
+#include "EngineGlobals.h"
 
 #define OUT // Does nothing, Defines for reader that line changes value somewhere
 
@@ -53,19 +54,21 @@ void UGrapple::TickComponent( float DeltaTime, ELevelTick TickType, FActorCompon
 		OUT	PlayerViewPointRotation
 	);
 	*/
-	/*
-	DrawDebugLine(
-		GetWorld(),
-		GetReachLineStart(),
-		//PlayerViewPointLocation,
-		GetReachLineEnd(),
-		FColor(255, 0, 0),
-		false,
-		0.f,
-		0.f,
-		50.f
-	);
-	*/
+	if (GEngine)
+	{
+		DrawDebugLine(
+			GetWorld(),
+			GetReachLineStart(),
+			//PlayerViewPointLocation,
+			GetReachLineEnd(),
+			FColor(255, 0, 0),
+			false,
+			0.f,
+			0.f,
+			50.f
+		);
+	}
+	
 }
 
 
