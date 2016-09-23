@@ -7,5 +7,9 @@ public class RKT : ModuleRules
 	public RKT(TargetInfo Target)
 	{
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
-	}
+
+        PrivateDependencyModuleNames.AddRange(new string[] { "CableComponent" });
+
+        PublicIncludePaths.AddRange(new string[] { "CableComponent/Public", "CableComponent/Classes" });
+    }
 }

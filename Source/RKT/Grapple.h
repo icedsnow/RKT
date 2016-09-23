@@ -4,7 +4,9 @@
 
 #include "Components/ActorComponent.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
+#include "CableComponent.h"
 #include "Grapple.generated.h"
+
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class RKT_API UGrapple : public UActorComponent
@@ -21,7 +23,12 @@ public:
 	// Called every frame
 	virtual void TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction ) override;
 
-		
+	
+	
+
+
+
+
 private:
 
 	
@@ -46,6 +53,11 @@ private:
 	FVector GetReachLineStart();
 	// Returns current end of reach line
 	FVector GetReachLineEnd();
+
+
+	///WIP
+	void InitializeCableComponent();
+
 
 protected:
 	// Ray-cast and grab what's in reach

@@ -1,6 +1,7 @@
 // Copyright 1998-2016 Epic Games, Inc. All Rights Reserved.
 #pragma once
 #include "GameFramework/Pawn.h"
+#include "CableComponent.h"
 #include "RKTPawn.generated.h"
 
 UCLASS(config=Game)
@@ -19,6 +20,13 @@ class ARKTPawn : public APawn
 	/** Camera component that will be our viewpoint */
 	UPROPERTY(Category = Camera, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* Camera;
+
+	///*********CABLE
+	UPROPERTY(Category = Cable, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	class UCableComponent* GPCable;
+	
+	///*********CABLE
+
 public:
 	ARKTPawn();
 
@@ -88,7 +96,7 @@ private:
 	float CurrentRollSpeed;
 
 
-	///**********GRAPPLE
+	
 
 
 public:
@@ -98,4 +106,6 @@ public:
 	FORCEINLINE class USpringArmComponent* GetSpringArm() const { return SpringArm; }
 	/** Returns Camera subobject **/
 	FORCEINLINE class UCameraComponent* GetCamera() const { return Camera; }
+
+	FORCEINLINE class UCableComponent* GetCableComponent() const { return GPCable; }
 };

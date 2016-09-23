@@ -72,6 +72,7 @@ void UGrapple::TickComponent( float DeltaTime, ELevelTick TickType, FActorCompon
 }
 
 
+
 void UGrapple::SetupInputComponent()
 {
 	InputComponent = GetOwner()->FindComponentByClass<UInputComponent>();
@@ -112,6 +113,7 @@ void UGrapple::Grab()
 			ComponentToGrab,
 			NAME_None,
 			ComponentToGrab->GetOwner()->GetActorLocation(), true);
+		
 	}
 }
 
@@ -162,4 +164,9 @@ FVector UGrapple::GetReachLineEnd()
 	
 	//return PlayerViewPointLocation * Reach;
 	return PlayerViewPointLocation + PlayerViewPointRotation.Vector() * Reach;
+}
+
+void UGrapple::InitializeCableComponent()
+{
+
 }

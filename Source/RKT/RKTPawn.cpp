@@ -42,6 +42,22 @@ ARKTPawn::ARKTPawn()
 	MinSpeed = 2000.f;
 	CurrentForwardSpeed = 500.f;
 
+	///*************Cable
+	/*
+	FVector RKT_Socket_LOC_L;
+	RKT_Socket_LOC_L = PlaneMesh->GetSocketLocation("RKT_L_Hook_Socket");
+	FVector RKT_Socket_LOC_R;
+	RKT_Socket_LOC_R = PlaneMesh->GetSocketLocation("RKT_R_Hook_Socket");
+	*/
+	GPCable = CreateDefaultSubobject<UCableComponent>(TEXT("GPCable0"));
+	GPCable->SetupAttachment(RootComponent);//, NULL, "RKT_L_Hook_Socket"); // TODO - set attachment location to socket
+	
+	//RKT_L_Hook_Socket
+
+	
+	///*************Cable
+
+
 	///***********MAXPITCH
 	MaxPitch = 15.f;
 	MinPitch = -10.f;
