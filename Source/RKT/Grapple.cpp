@@ -54,8 +54,8 @@ void UGrapple::TickComponent( float DeltaTime, ELevelTick TickType, FActorCompon
 		OUT	PlayerViewPointRotation
 	);
 	*/
-	if (GEngine)
-	{
+
+	/*
 		DrawDebugLine(
 			GetWorld(),
 			GetReachLineStart(),
@@ -67,7 +67,7 @@ void UGrapple::TickComponent( float DeltaTime, ELevelTick TickType, FActorCompon
 			0.f,
 			50.f
 		);
-	}
+	*/
 	
 }
 
