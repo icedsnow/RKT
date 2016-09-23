@@ -52,6 +52,7 @@ ARKTPawn::ARKTPawn()
 	GPCable = CreateDefaultSubobject<UCableComponent>(TEXT("GPCable0"));
 	GPCable->SetupAttachment(RootComponent);//, NULL, "RKT_L_Hook_Socket"); // TODO - set attachment location to socket
 	
+											
 	//RKT_L_Hook_Socket
 
 	

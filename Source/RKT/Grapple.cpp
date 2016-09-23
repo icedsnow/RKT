@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "RKT.h"
+#include "RKTPawn.h"
 #include "Grapple.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "DrawDebugHelpers.h"
@@ -104,7 +105,10 @@ void UGrapple::Grab()
 	auto HitResult = GetFirstPhysicsBodyInReach();
 	auto ComponentToGrab = HitResult.GetComponent();
 	auto ActorHit = HitResult.GetActor();
-
+	//cable code
+	//CableComponentLeft = GetOwner()->FindComponentByClass<UCableComponent>();
+	CableComponentLeft = GetWorld()->GetFirstPlayerController()->GetPawn()->GetComponentsByClass(TSubclassOf<UCableComponent> UCableComponent);
+	///<UCableComponent>(TEXT("GPCable0"))
 	/// If we hit something then attach a physics handle
 	if (ActorHit)
 	{
@@ -113,7 +117,8 @@ void UGrapple::Grab()
 			ComponentToGrab,
 			NAME_None,
 			ComponentToGrab->GetOwner()->GetActorLocation(), true);
-		
+		//cable code
+		CableComponentLeft->AttachEndTo(ComponentToGrab);
 	}
 }
 
@@ -144,7 +149,7 @@ FVector UGrapple::GetReachLineStart()
 	//FVector PlayerViewPointLocation;
 	
 	//FVector GetActorLocation();
-	FVector PlayerViewPointLocation = GetWorld()->GetFirstPlayerController()->GetControlledPawn()->GetActorLocation();
+	FVector PlayerViewPointLocation = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation();
 	
 	return PlayerViewPointLocation;
 }
@@ -159,8 +164,8 @@ FVector UGrapple::GetReachLineEnd()
 		OUT    PlayerViewPointRotation
 	);
 	*/
-	FVector PlayerViewPointLocation = GetWorld()->GetFirstPlayerController()->GetControlledPawn()->GetActorLocation();
-	FRotator PlayerViewPointRotation = GetWorld()->GetFirstPlayerController()->GetControlledPawn()->GetActorRotation();
+	FVector PlayerViewPointLocation = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation();
+	FRotator PlayerViewPointRotation = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorRotation();
 	
 	//return PlayerViewPointLocation * Reach;
 	return PlayerViewPointLocation + PlayerViewPointRotation.Vector() * Reach;
@@ -168,5 +173,6 @@ FVector UGrapple::GetReachLineEnd()
 
 void UGrapple::InitializeCableComponent()
 {
-
+//	GetOwner()->FindComponentByClass<UCableComponent>();
 }
+
