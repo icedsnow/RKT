@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Components/ActorComponent.h"
+#include "RKTPawn.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "CableComponent.h"
 #include "Grapple.generated.h"
@@ -27,7 +28,8 @@ public:
 	///*********CABLE
 ///	UPROPERTY(Category = Cable, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 ///		class UCableComponent* GPCable;
-
+	
+	
 	///*********CABLE
 
 
@@ -42,6 +44,8 @@ private:
 
 	UCableComponent* CableComponentLeft = nullptr;
 	
+	
+	void FindCableComponent();
 
 	// Find attached physics Handle
 	void FindPhysicsHandleComponent();
@@ -57,9 +61,6 @@ private:
 	// Returns current end of reach line
 	FVector GetReachLineEnd();
 
-
-	///WIP
-	void InitializeCableComponent();
 
 
 protected:

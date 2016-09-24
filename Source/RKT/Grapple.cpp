@@ -90,6 +90,8 @@ void UGrapple::SetupInputComponent()
 	}
 }
 
+
+
 void UGrapple::FindPhysicsHandleComponent()
 {
 	///Look for attached physics handle
@@ -99,17 +101,43 @@ void UGrapple::FindPhysicsHandleComponent()
 		UE_LOG(LogTemp, Error, TEXT("%s missing physics handle component"), *GetOwner()->GetName())
 	}
 }
+
+
+void UGrapple::FindCableComponent()
+{
+	//CableComponentLeft = GetOwner()->FindComponentByClass<UCableComponent>();
+
+	TArray<UCableComponent*> Comps;
+
+	GetOwner()->GetComponents(Comps);
+	if (Comps.Num() > 0)
+	{
+		UCableComponent* FoundComp = Comps[0];
+		//do stuff with FoundComp
+	
+	}
+	/*
+	if (CableComponentLeft == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("%s missing Cable Component Left"), *GetOwner()->GetName())
+	}
+	*/
+}
+
+
 void UGrapple::Grab()
 {
 	/// Line trace - Try to reach any actors with physics body collision channel set
 	auto HitResult = GetFirstPhysicsBodyInReach();
 	auto ComponentToGrab = HitResult.GetComponent();
 	auto ActorHit = HitResult.GetActor();
-	//cable code
-	//CableComponentLeft = GetOwner()->FindComponentByClass<UCableComponent>();
-	CableComponentLeft = GetWorld()->GetFirstPlayerController()->GetPawn()->GetComponentsByClass(TSubclassOf<UCableComponent> UCableComponent);
-	///<UCableComponent>(TEXT("GPCable0"))
-	/// If we hit something then attach a physics handle
+	//auto ActorHitBy = 
+	auto GettingParentAct = GetWorld()->GetFirstPlayerController()->GetPawn()->GetParentActor();//FindComponentByClass<UCableComponent>();
+	//auto GettingCable = FindCableComponent();
+	//FindCableComponent();
+	//auto findcableforme = GetWorld()->GetFirstPlayerController()->component
+	
+	//auto GettingCable = GettingParentAct->FindComponentByClass<UCableComponent>();
 	if (ActorHit)
 	{
 		if (!PhysicsHandle) { return; }
@@ -117,8 +145,9 @@ void UGrapple::Grab()
 			ComponentToGrab,
 			NAME_None,
 			ComponentToGrab->GetOwner()->GetActorLocation(), true);
-		//cable code
-		CableComponentLeft->AttachEndTo(ComponentToGrab);
+		//GPCable->AttachEndTo(ComponentToGrab);
+		//cable
+		
 	}
 }
 
@@ -170,9 +199,3 @@ FVector UGrapple::GetReachLineEnd()
 	//return PlayerViewPointLocation * Reach;
 	return PlayerViewPointLocation + PlayerViewPointRotation.Vector() * Reach;
 }
-
-void UGrapple::InitializeCableComponent()
-{
-//	GetOwner()->FindComponentByClass<UCableComponent>();
-}
-

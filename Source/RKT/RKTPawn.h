@@ -108,4 +108,6 @@ public:
 	FORCEINLINE class UCameraComponent* GetCamera() const { return Camera; }
 
 	FORCEINLINE class UCableComponent* GetCableComponent() const { return GPCable; }
+
+	////////////////////////////////////////////////////
 };

@@ -49,10 +49,15 @@ ARKTPawn::ARKTPawn()
 	FVector RKT_Socket_LOC_R;
 	RKT_Socket_LOC_R = PlaneMesh->GetSocketLocation("RKT_R_Hook_Socket");
 	*/
+	//auto RKT_Socket_L1 = PlaneMesh->GetSocketByName(this, TEXT("RKT_L_Hook_Socket"));         //("RKT_L_Hook_Socket");
+	auto RKT_Socket_L = PlaneMesh->GetSocketLocation("RKT_L_Hook_Socket");
+	//auto RKT_Socket_L = PlaneMesh->GetSocketByName("RKT_L_Hook_Socket");
+
 	GPCable = CreateDefaultSubobject<UCableComponent>(TEXT("GPCable0"));
 	GPCable->SetupAttachment(RootComponent);//, NULL, "RKT_L_Hook_Socket"); // TODO - set attachment location to socket
+	GPCable->EndLocation = RKT_Socket_L;
+											///GPCable->SetAttachEndTo(, RKT_Socket_L);//(RKT_Socket_L);
 	
-											
 	//RKT_L_Hook_Socket
 
 	
