@@ -102,7 +102,7 @@ void UGrapple::FindPhysicsHandleComponent()
 	}
 }
 
-
+/*BP
 void UGrapple::FindCableComponent()
 {
 	//CableComponentLeft = GetOwner()->FindComponentByClass<UCableComponent>();
@@ -116,14 +116,14 @@ void UGrapple::FindCableComponent()
 		//do stuff with FoundComp
 	
 	}
-	/*
+	
 	if (CableComponentLeft == nullptr)
 	{
 		UE_LOG(LogTemp, Error, TEXT("%s missing Cable Component Left"), *GetOwner()->GetName())
 	}
-	*/
+	
 }
-
+*/
 
 void UGrapple::Grab()
 {
@@ -131,13 +131,7 @@ void UGrapple::Grab()
 	auto HitResult = GetFirstPhysicsBodyInReach();
 	auto ComponentToGrab = HitResult.GetComponent();
 	auto ActorHit = HitResult.GetActor();
-	//auto ActorHitBy = 
 	auto GettingParentAct = GetWorld()->GetFirstPlayerController()->GetPawn()->GetParentActor();//FindComponentByClass<UCableComponent>();
-	//auto GettingCable = FindCableComponent();
-	//FindCableComponent();
-	//auto findcableforme = GetWorld()->GetFirstPlayerController()->component
-	
-	//auto GettingCable = GettingParentAct->FindComponentByClass<UCableComponent>();
 	if (ActorHit)
 	{
 		if (!PhysicsHandle) { return; }
@@ -145,9 +139,6 @@ void UGrapple::Grab()
 			ComponentToGrab,
 			NAME_None,
 			ComponentToGrab->GetOwner()->GetActorLocation(), true);
-		//GPCable->AttachEndTo(ComponentToGrab);
-		//cable
-		
 	}
 }
 

@@ -52,11 +52,11 @@ ARKTPawn::ARKTPawn()
 	//auto RKT_Socket_L1 = PlaneMesh->GetSocketByName(this, TEXT("RKT_L_Hook_Socket"));         //("RKT_L_Hook_Socket");
 	auto RKT_Socket_L = PlaneMesh->GetSocketLocation("RKT_L_Hook_Socket");
 	//auto RKT_Socket_L = PlaneMesh->GetSocketByName("RKT_L_Hook_Socket");
-
+	/*BP
 	GPCable = CreateDefaultSubobject<UCableComponent>(TEXT("GPCable0"));
 	GPCable->SetupAttachment(RootComponent);//, NULL, "RKT_L_Hook_Socket"); // TODO - set attachment location to socket
 	GPCable->EndLocation = RKT_Socket_L;
-											///GPCable->SetAttachEndTo(, RKT_Socket_L);//(RKT_Socket_L);
+	*/										///GPCable->SetAttachEndTo(, RKT_Socket_L);//(RKT_Socket_L);
 	
 	//RKT_L_Hook_Socket
 
@@ -67,12 +67,10 @@ ARKTPawn::ARKTPawn()
 	///***********MAXPITCH
 	MaxPitch = 15.f;
 	MinPitch = -10.f;
-	///***********MAXPITCH
-
+	
 	///**********CONSTRAIN ROLL
 	MaxRoll = 0.f;
 	MinRoll = 0.f;
-	///**********CONSTRAIN ROLL
 }
 
 void ARKTPawn::Tick(float DeltaSeconds)
@@ -86,13 +84,12 @@ void ARKTPawn::Tick(float DeltaSeconds)
 	const float OldPitch = GetActorRotation().Pitch;
 	const float MinDeltaPitch = MinPitch - OldPitch;
 	const float MaxDeltaPitch = MaxPitch - OldPitch;
-	///*******MAXPITCH
 	
 	///********CONSTRAIN ROLL
 	const float OldRoll = GetActorRotation().Roll;
 	const float MinDeltaRoll = MinRoll - OldRoll;
 	const float MaxDeltaRoll = MaxRoll - OldRoll;
-	///********CONSTRAIN ROLL
+	
 
 	// Calculate change in rotation this frame
 	FRotator DeltaRotation(0,0,0);
@@ -103,7 +100,6 @@ void ARKTPawn::Tick(float DeltaSeconds)
 	DeltaRotation.Pitch = FMath::ClampAngle(CurrentPitchSpeed * DeltaSeconds, MinDeltaPitch, MaxDeltaPitch);
 	///********MAXPITCH
 	DeltaRotation.Yaw = CurrentYawSpeed * DeltaSeconds;
-	///TESTING physics while clamping angle on DeltaRotation.Roll actively
 	///DeltaRotation.Roll = CurrentRollSpeed * DeltaSeconds;
 	///********CONSTRAIN ROLL
 	DeltaRotation.Roll = FMath::ClampAngle(CurrentRollSpeed * DeltaSeconds, MinDeltaRoll, MaxDeltaRoll);
@@ -179,5 +175,5 @@ void ARKTPawn::MoveRightInput(float Val)
 	// Smoothly interpolate roll speed
 	/// CurrentRollSpeed Commented out  to see effect
 	///UPDATE: current edition works great, No noticeable effect uncommented with current changes, interps argueably less smooth with it in.
-	///CurrentRollSpeed = FMath::FInterpTo(CurrentRollSpeed, TargetRollSpeed, GetWorld()->GetDeltaSeconds(), 2.f);
+	CurrentRollSpeed = FMath::FInterpTo(CurrentRollSpeed, TargetRollSpeed, GetWorld()->GetDeltaSeconds(), 2.f);
 }

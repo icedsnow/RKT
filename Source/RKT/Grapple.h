@@ -42,10 +42,10 @@ private:
 
 	UInputComponent* InputComponent = nullptr;
 
-	UCableComponent* CableComponentLeft = nullptr;
+	//UCableComponent* CableComponentLeft = nullptr;
 	
 	
-	void FindCableComponent();
+	//void FindCableComponent();
 
 	// Find attached physics Handle
 	void FindPhysicsHandleComponent();

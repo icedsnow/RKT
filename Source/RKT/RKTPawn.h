@@ -22,9 +22,10 @@ class ARKTPawn : public APawn
 	class UCameraComponent* Camera;
 
 	///*********CABLE
+	/*BP
 	UPROPERTY(Category = Cable, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	class UCableComponent* GPCable;
-	
+	*/
 	///*********CABLE
 
 public:
@@ -74,15 +75,14 @@ private:
 
 	UPROPERTY(Category = Pitch, EditAnywhere)
 	float MinPitch;
-	///**********MAXPITCH
-
+	
 	///**********CONSTRAIN ROLL
 	UPROPERTY(Category = Roll, EditAnywhere)
 	float MaxRoll;
 
 	UPROPERTY(Category = Roll, EditAnywhere)
 	float MinRoll;
-	///**********CONSTRAIN ROLL
+	
 	/** Current forward speed */
 	float CurrentForwardSpeed;
 
@@ -107,7 +107,7 @@ public:
 	/** Returns Camera subobject **/
 	FORCEINLINE class UCameraComponent* GetCamera() const { return Camera; }
 
-	FORCEINLINE class UCableComponent* GetCableComponent() const { return GPCable; }
+	//FORCEINLINE class UCableComponent* GetCableComponent() const { return GPCable; }
 
 	////////////////////////////////////////////////////
 };
