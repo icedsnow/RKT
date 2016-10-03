@@ -1,17 +1,17 @@
 // Copyright 1998-2016 Epic Games, Inc. All Rights Reserved.
 #pragma once
 #include "GameFramework/Pawn.h"
-#include "CableComponent.h"
+//#include "CableComponent.h"
 #include "RKTPawn.generated.h"
 
 UCLASS(config=Game)
-class ARKTPawn : public APawn
+class RKT_API ARKT : public APawn
 {
 	GENERATED_BODY()
 
 	/** StaticMesh component that will be the visuals for our flying pawn */
 	UPROPERTY(Category = Mesh, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	class UStaticMeshComponent* PlaneMesh;
+	class UStaticMeshComponent* RocketMesh;
 
 	/** Spring arm that will offset the camera */
 	UPROPERTY(Category = Camera, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
@@ -21,15 +21,8 @@ class ARKTPawn : public APawn
 	UPROPERTY(Category = Camera, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* Camera;
 
-	///*********CABLE
-	/*BP
-	UPROPERTY(Category = Cable, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	class UCableComponent* GPCable;
-	*/
-	///*********CABLE
-
 public:
-	ARKTPawn();
+
 
 	// Begin AActor overrides
 	virtual void Tick(float DeltaSeconds) override;
@@ -53,12 +46,16 @@ protected:
 
 private:
 
+	///NEW
+	// Sets default values for this pawn's properties
+	ARKT();
+
 	/** How quickly forward speed changes */
-	UPROPERTY(Category=Plane, EditAnywhere)
+	UPROPERTY(Category= Rocket, EditAnywhere)
 	float Acceleration;
 
 	/** How quickly pawn can steer */
-	UPROPERTY(Category=Plane, EditAnywhere)
+	UPROPERTY(Category= Rocket, EditAnywhere)
 	float TurnSpeed;
 
 	/** Max forward speed */
@@ -94,20 +91,14 @@ private:
 
 	/** Current roll speed */
 	float CurrentRollSpeed;
-
-
 	
 
-
 public:
-	/** Returns PlaneMesh subobject **/
-	FORCEINLINE class UStaticMeshComponent* GetPlaneMesh() const { return PlaneMesh; }
+	/** Returns RocketMesh subobject **/
+	FORCEINLINE class UStaticMeshComponent* GetRocketMesh() const { return RocketMesh; }
 	/** Returns SpringArm subobject **/
 	FORCEINLINE class USpringArmComponent* GetSpringArm() const { return SpringArm; }
 	/** Returns Camera subobject **/
 	FORCEINLINE class UCameraComponent* GetCamera() const { return Camera; }
 
-	//FORCEINLINE class UCableComponent* GetCableComponent() const { return GPCable; }
-
-	////////////////////////////////////////////////////
 };

@@ -24,14 +24,6 @@ public:
 	// Called every frame
 	virtual void TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction ) override;
 
-	
-	///*********CABLE
-///	UPROPERTY(Category = Cable, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-///		class UCableComponent* GPCable;
-	
-	
-	///*********CABLE
-
 
 private:
 
@@ -41,11 +33,6 @@ private:
 	UPhysicsHandleComponent* PhysicsHandle = nullptr;
 
 	UInputComponent* InputComponent = nullptr;
-
-	//UCableComponent* CableComponentLeft = nullptr;
-	
-	
-	//void FindCableComponent();
 
 	// Find attached physics Handle
 	void FindPhysicsHandleComponent();
@@ -73,5 +60,4 @@ protected:
 
 public:
 
-	///FORCEINLINE class UCableComponent* GetCableComponent() const { return GPCable; }
 };

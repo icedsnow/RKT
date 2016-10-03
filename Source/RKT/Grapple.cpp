@@ -44,30 +44,8 @@ void UGrapple::TickComponent( float DeltaTime, ELevelTick TickType, FActorCompon
 		// move the object that we're holding
 		PhysicsHandle->SetTargetLocation(GetReachLineEnd());
 	}
-	//FRotator PlayerViewPointRotation;
-	
-
-	
-
 	/*
-	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(
-		OUT	PlayerViewPointLocation,
-		OUT	PlayerViewPointRotation
-	);
-	*/
-
-	/*
-		DrawDebugLine(
-			GetWorld(),
-			GetReachLineStart(),
-			//PlayerViewPointLocation,
-			GetReachLineEnd(),
-			FColor(255, 0, 0),
-			false,
-			0.f,
-			0.f,
-			50.f
-		);
+		DrawDebugLine(GetWorld(), GetReachLineStart(), GetReachLineEnd(), FColor(255, 0, 0), false,	0.f, 0.f, 50.f);
 	*/
 	
 }
@@ -101,29 +79,6 @@ void UGrapple::FindPhysicsHandleComponent()
 		UE_LOG(LogTemp, Error, TEXT("%s missing physics handle component"), *GetOwner()->GetName())
 	}
 }
-
-/*BP
-void UGrapple::FindCableComponent()
-{
-	//CableComponentLeft = GetOwner()->FindComponentByClass<UCableComponent>();
-
-	TArray<UCableComponent*> Comps;
-
-	GetOwner()->GetComponents(Comps);
-	if (Comps.Num() > 0)
-	{
-		UCableComponent* FoundComp = Comps[0];
-		//do stuff with FoundComp
-	
-	}
-	
-	if (CableComponentLeft == nullptr)
-	{
-		UE_LOG(LogTemp, Error, TEXT("%s missing Cable Component Left"), *GetOwner()->GetName())
-	}
-	
-}
-*/
 
 void UGrapple::Grab()
 {

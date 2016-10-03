@@ -7,5 +7,5 @@
 ARKTGameMode::ARKTGameMode()
 {
 	// set default pawn class to our flying pawn
-	DefaultPawnClass = ARKTPawn::StaticClass();
+	DefaultPawnClass = ARKT::StaticClass();
 }

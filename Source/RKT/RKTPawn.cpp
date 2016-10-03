@@ -3,31 +3,35 @@
 #include "RKT.h"
 #include "RKTPawn.h"
 
-ARKTPawn::ARKTPawn()
+ARKT::ARKT()
 {
+	///New
+	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	PrimaryActorTick.bCanEverTick = true;
+
 	// Structure to hold one-time initialization
 	
 	struct FConstructorStatics
 	{
-		ConstructorHelpers::FObjectFinderOptional<UStaticMesh> PlaneMesh;
+		ConstructorHelpers::FObjectFinderOptional<UStaticMesh> RocketMesh;
 		FConstructorStatics()
-			: PlaneMesh(TEXT("/Game/Flying/Meshes/Rocket/Rocket_Pre_mesh.Rocket_Pre_mesh"))
+			: RocketMesh(TEXT("/Game/Flying/Meshes/Rocket/Rocket_Pre_mesh.Rocket_Pre_mesh"))
 		{
 		}
 	};
 	static FConstructorStatics ConstructorStatics;
 
 	// Create static mesh component
-	PlaneMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PlaneMesh0"));
-	PlaneMesh->SetStaticMesh(ConstructorStatics.PlaneMesh.Get());
-	RootComponent = PlaneMesh;
+	RocketMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RocketMesh0"));
+	RocketMesh->SetStaticMesh(ConstructorStatics.RocketMesh.Get());
+	RootComponent = RocketMesh;
 
 	// Create a spring arm component
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm0"));
 	SpringArm->SetupAttachment(RootComponent);
 	SpringArm->TargetArmLength = 250.0f; // The camera follows at this distance behind the character	
 	SpringArm->SocketOffset = FVector(-500.f,0.f,150.f);
-	SpringArm->bEnableCameraLag = false;
+	SpringArm->bEnableCameraLag = true;
 	SpringArm->CameraLagSpeed = 15.f;
 
 	// Create camera component 
@@ -42,28 +46,6 @@ ARKTPawn::ARKTPawn()
 	MinSpeed = 2000.f;
 	CurrentForwardSpeed = 500.f;
 
-	///*************Cable
-	/*
-	FVector RKT_Socket_LOC_L;
-	RKT_Socket_LOC_L = PlaneMesh->GetSocketLocation("RKT_L_Hook_Socket");
-	FVector RKT_Socket_LOC_R;
-	RKT_Socket_LOC_R = PlaneMesh->GetSocketLocation("RKT_R_Hook_Socket");
-	*/
-	//auto RKT_Socket_L1 = PlaneMesh->GetSocketByName(this, TEXT("RKT_L_Hook_Socket"));         //("RKT_L_Hook_Socket");
-	auto RKT_Socket_L = PlaneMesh->GetSocketLocation("RKT_L_Hook_Socket");
-	//auto RKT_Socket_L = PlaneMesh->GetSocketByName("RKT_L_Hook_Socket");
-	/*BP
-	GPCable = CreateDefaultSubobject<UCableComponent>(TEXT("GPCable0"));
-	GPCable->SetupAttachment(RootComponent);//, NULL, "RKT_L_Hook_Socket"); // TODO - set attachment location to socket
-	GPCable->EndLocation = RKT_Socket_L;
-	*/										///GPCable->SetAttachEndTo(, RKT_Socket_L);//(RKT_Socket_L);
-	
-	//RKT_L_Hook_Socket
-
-	
-	///*************Cable
-
-
 	///***********MAXPITCH
 	MaxPitch = 15.f;
 	MinPitch = -10.f;
@@ -73,11 +55,14 @@ ARKTPawn::ARKTPawn()
 	MinRoll = 0.f;
 }
 
-void ARKTPawn::Tick(float DeltaSeconds)
+void ARKT::Tick(float DeltaSeconds)
 {
+	// Call any parent class Tick implementation
+	Super::Tick(DeltaSeconds);
+
 	const FVector LocalMove = FVector(CurrentForwardSpeed * DeltaSeconds, 0.f, 0.f);
 
-	// Move plane forwards (with sweep so we stop when we collide with things)
+	// Move Rocket forwards (with sweep so we stop when we collide with things)
 	AddActorLocalOffset(LocalMove, true);
 	
 	///*********MAXPITCH
@@ -104,14 +89,12 @@ void ARKTPawn::Tick(float DeltaSeconds)
 	///********CONSTRAIN ROLL
 	DeltaRotation.Roll = FMath::ClampAngle(CurrentRollSpeed * DeltaSeconds, MinDeltaRoll, MaxDeltaRoll);
 	///********CONSTRAIN ROLL
-	// Rotate plane
+	// Rotate Rocket
 	AddActorLocalRotation(DeltaRotation);
 
-	// Call any parent class Tick implementation
-	Super::Tick(DeltaSeconds);
 }
 
-void ARKTPawn::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other, class UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit)
+void ARKT::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other, class UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit)
 {
 	Super::NotifyHit(MyComp, Other, OtherComp, bSelfMoved, HitLocation, HitNormal, NormalImpulse, Hit);
 
@@ -121,18 +104,18 @@ void ARKTPawn::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other,
 }
 
 
-void ARKTPawn::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
+void ARKT::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
 	check(PlayerInputComponent);
 
 	// Bind our control axis' to callback functions
-	PlayerInputComponent->BindAxis("Thrust", this, &ARKTPawn::ThrustInput);
-	PlayerInputComponent->BindAxis("MoveUp", this, &ARKTPawn::MoveUpInput);
-	PlayerInputComponent->BindAxis("MoveRight", this, &ARKTPawn::MoveRightInput);
+	PlayerInputComponent->BindAxis("Thrust", this, &ARKT::ThrustInput);
+	PlayerInputComponent->BindAxis("MoveUp", this, &ARKT::MoveUpInput);
+	PlayerInputComponent->BindAxis("MoveRight", this, &ARKT::MoveRightInput);
 	//
 }
 
-void ARKTPawn::ThrustInput(float Val)
+void ARKT::ThrustInput(float Val)
 {
 	// Is there no input?
 	bool bHasInput = !FMath::IsNearlyEqual(Val, 0.f);
@@ -144,7 +127,7 @@ void ARKTPawn::ThrustInput(float Val)
 	CurrentForwardSpeed = FMath::Clamp(NewForwardSpeed, MinSpeed, MaxSpeed);
 }
 
-void ARKTPawn::MoveUpInput(float Val)
+void ARKT::MoveUpInput(float Val)
 {
 	// Target pitch speed is based in input
 	float TargetPitchSpeed = (Val * TurnSpeed * -1.f);
@@ -156,7 +139,7 @@ void ARKTPawn::MoveUpInput(float Val)
 	CurrentPitchSpeed = FMath::FInterpTo(CurrentPitchSpeed, TargetPitchSpeed, GetWorld()->GetDeltaSeconds(), 2.f);
 }
 
-void ARKTPawn::MoveRightInput(float Val)
+void ARKT::MoveRightInput(float Val)
 {
 	// Target yaw speed is based on input
 	float TargetYawSpeed = (Val * TurnSpeed);
@@ -169,11 +152,9 @@ void ARKTPawn::MoveRightInput(float Val)
 
 	// If turning, yaw value is used to influence roll
 	// If not turning, roll to reverse current roll value
-	///ROLL has been constrained min, max = 0
+	///ROLL constrained min, max = 0
 	float TargetRollSpeed = bIsTurning ? (CurrentYawSpeed * 0.5f) : (GetActorRotation().Roll * -2.f);
 
 	// Smoothly interpolate roll speed
-	/// CurrentRollSpeed Commented out  to see effect
-	///UPDATE: current edition works great, No noticeable effect uncommented with current changes, interps argueably less smooth with it in.
 	CurrentRollSpeed = FMath::FInterpTo(CurrentRollSpeed, TargetRollSpeed, GetWorld()->GetDeltaSeconds(), 2.f);
 }
