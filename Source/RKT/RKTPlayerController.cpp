@@ -14,7 +14,7 @@ void ARKTPlayerController::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-ARKT* ARKTPlayerController::GetControlledRocket() const
+ARKTPawn* ARKTPlayerController::GetControlledRocket() const
 {
-	return Cast<ARKT>(GetPawn());
+	return Cast<ARKTPawn>(GetPawn());
 }

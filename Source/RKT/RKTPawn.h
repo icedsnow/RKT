@@ -5,7 +5,7 @@
 #include "RKTPawn.generated.h"
 
 UCLASS(config=Game)
-class RKT_API ARKT : public APawn
+class RKT_API ARKTPawn : public APawn
 {
 	GENERATED_BODY()
 
@@ -48,7 +48,7 @@ private:
 
 	///NEW
 	// Sets default values for this pawn's properties
-	ARKT();
+	ARKTPawn();
 
 	/** How quickly forward speed changes */
 	UPROPERTY(Category= Rocket, EditAnywhere)

@@ -3,7 +3,7 @@
 #include "RKT.h"
 #include "RKTPawn.h"
 
-ARKT::ARKT()
+ARKTPawn::ARKTPawn()
 {
 	///New
 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
@@ -55,7 +55,7 @@ ARKT::ARKT()
 	MinRoll = 0.f;
 }
 
-void ARKT::Tick(float DeltaSeconds)
+void ARKTPawn::Tick(float DeltaSeconds)
 {
 	// Call any parent class Tick implementation
 	Super::Tick(DeltaSeconds);
@@ -94,7 +94,7 @@ void ARKT::Tick(float DeltaSeconds)
 
 }
 
-void ARKT::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other, class UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit)
+void ARKTPawn::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other, class UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit)
 {
 	Super::NotifyHit(MyComp, Other, OtherComp, bSelfMoved, HitLocation, HitNormal, NormalImpulse, Hit);
 
@@ -104,18 +104,18 @@ void ARKT::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other, cla
 }
 
 
-void ARKT::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
+void ARKTPawn::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
 	check(PlayerInputComponent);
 
 	// Bind our control axis' to callback functions
-	PlayerInputComponent->BindAxis("Thrust", this, &ARKT::ThrustInput);
-	PlayerInputComponent->BindAxis("MoveUp", this, &ARKT::MoveUpInput);
-	PlayerInputComponent->BindAxis("MoveRight", this, &ARKT::MoveRightInput);
+	PlayerInputComponent->BindAxis("Thrust", this, &ARKTPawn::ThrustInput);
+	PlayerInputComponent->BindAxis("MoveUp", this, &ARKTPawn::MoveUpInput);
+	PlayerInputComponent->BindAxis("MoveRight", this, &ARKTPawn::MoveRightInput);
 	//
 }
 
-void ARKT::ThrustInput(float Val)
+void ARKTPawn::ThrustInput(float Val)
 {
 	// Is there no input?
 	bool bHasInput = !FMath::IsNearlyEqual(Val, 0.f);
@@ -127,7 +127,7 @@ void ARKT::ThrustInput(float Val)
 	CurrentForwardSpeed = FMath::Clamp(NewForwardSpeed, MinSpeed, MaxSpeed);
 }
 
-void ARKT::MoveUpInput(float Val)
+void ARKTPawn::MoveUpInput(float Val)
 {
 	// Target pitch speed is based in input
 	float TargetPitchSpeed = (Val * TurnSpeed * -1.f);
@@ -139,7 +139,7 @@ void ARKT::MoveUpInput(float Val)
 	CurrentPitchSpeed = FMath::FInterpTo(CurrentPitchSpeed, TargetPitchSpeed, GetWorld()->GetDeltaSeconds(), 2.f);
 }
 
-void ARKT::MoveRightInput(float Val)
+void ARKTPawn::MoveRightInput(float Val)
 {
 	// Target yaw speed is based on input
 	float TargetYawSpeed = (Val * TurnSpeed);

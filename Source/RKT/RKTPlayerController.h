@@ -16,7 +16,7 @@ class RKT_API ARKTPlayerController : public APlayerController
 	
 	
 private:
-	ARKT* GetControlledRocket() const;
+	ARKTPawn* GetControlledRocket() const;
 	
 	virtual void BeginPlay() override;
 	
