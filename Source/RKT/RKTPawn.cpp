@@ -1,7 +1,13 @@
 // Copyright 1998-2016 Epic Games, Inc. All Rights Reserved.
 
 #include "RKT.h"
+#include "Runtime/Landscape/Classes/LandscapeProxy.h"
+#include "Runtime/Landscape/Classes/Landscape.h"
 #include "RKTPawn.h"
+#include "RKTFloatingPawnMovement.h"
+#include "EngineUtils.h"
+#include "Engine/EngineTypes.h"
+
 
 ARKTPawn::ARKTPawn()
 {
@@ -47,23 +53,29 @@ ARKTPawn::ARKTPawn()
 	CurrentForwardSpeed = 500.f;
 
 	///***********MAXPITCH
-	MaxPitch = 15.f;
-	MinPitch = -10.f;
+	MaxPitch = 5.f;
+	MinPitch = -5.f;
 	
 	///**********CONSTRAIN ROLL
 	MaxRoll = 0.f;
 	MinRoll = 0.f;
+
+
+	///NEW - Movement Components
+	RKTMovementComponent = CreateDefaultSubobject<URKTFloatingPawnMovement>(TEXT("CustomMovementComponent"));
+	RKTMovementComponent->UpdatedComponent = RootComponent;
+
 }
 
 void ARKTPawn::Tick(float DeltaSeconds)
 {
 	// Call any parent class Tick implementation
 	Super::Tick(DeltaSeconds);
-
+	
 	const FVector LocalMove = FVector(CurrentForwardSpeed * DeltaSeconds, 0.f, 0.f);
 
 	// Move Rocket forwards (with sweep so we stop when we collide with things)
-	AddActorLocalOffset(LocalMove, true);
+	AddActorLocalOffset(LocalMove, true); //true
 	
 	///*********MAXPITCH
 	const float OldPitch = GetActorRotation().Pitch;
@@ -80,30 +92,142 @@ void ARKTPawn::Tick(float DeltaSeconds)
 	FRotator DeltaRotation(0,0,0);
 	//OLD
 	//DeltaRotation.Pitch = CurrentPitchSpeed * DeltaSeconds;
-
-	///*********MAXPITCH
+	///
+	
 	DeltaRotation.Pitch = FMath::ClampAngle(CurrentPitchSpeed * DeltaSeconds, MinDeltaPitch, MaxDeltaPitch);
-	///********MAXPITCH
+	//Yaw doesn't need clamp constraint
 	DeltaRotation.Yaw = CurrentYawSpeed * DeltaSeconds;
+
+
 	///DeltaRotation.Roll = CurrentRollSpeed * DeltaSeconds;
-	///********CONSTRAIN ROLL
+	
 	DeltaRotation.Roll = FMath::ClampAngle(CurrentRollSpeed * DeltaSeconds, MinDeltaRoll, MaxDeltaRoll);
-	///********CONSTRAIN ROLL
+	
 	// Rotate Rocket
+	//AddActorL(DeltaLocation);
+
 	AddActorLocalRotation(DeltaRotation);
+
+
+
+	
+
+
+
+
+
 
 }
 
 void ARKTPawn::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other, class UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit)
 {
-	Super::NotifyHit(MyComp, Other, OtherComp, bSelfMoved, HitLocation, HitNormal, NormalImpulse, Hit);
 
-	// Deflect along the surface when we collide.
+	Super::NotifyHit(MyComp, Other, OtherComp, bSelfMoved, HitLocation, HitNormal, NormalImpulse, Hit);
+	
+
+	// Deflect along the surface when we collide. //0.025
+
 	FRotator CurrentRotation = GetActorRotation(RootComponent);
-	SetActorRotation(FQuat::Slerp(CurrentRotation.Quaternion(), HitNormal.ToOrientationQuat(), 0.025f));
+
+	///SetActorRotation(FQuat::Slerp(CurrentRotation.Quaternion(), HitNormal.ToOrientationQuat(), 0.025f));
+	//////////////////////////////////////////////////////////////////////////
+	const FVector OldLocation = RootComponent->GetComponentLocation();
+	const FQuat QRotation = RootComponent->GetComponentQuat();
+
+	//RKTMovementComponent->SafeMoveUpdatedComponent(Delta, QRotation, true, Hit);
+	// If we bumped into something, try to slide along it
+	//if (Hit.IsValidBlockingHit())
+	//{
+		//RKTMovementComponent->HandleImpact(Hit, GetWorld()->GetDeltaSeconds(), Delta);
+		//Try to slide along surface
+		//RKTMovementComponent->DeflectionSlide(Delta, 1.f - Hit.Time, Hit.Normal, SlideHit);
+		//RKTMovementComponent->SlideAlongSurface(Delta, 1.f, HitNormal, SlideHit, true);
+		///
+		//Log Fires correctly, Slide still doesn't work
+		//UE_LOG(LogTemp, Warning, TEXT("Hit Result: %s"), *Hit.ToString());
+
+		
+	//}
+	//Velocity formula
+	//Update Velocity
+	const FVector NewLocation = RootComponent->GetComponentLocation();
+	Velocity = ((NewLocation - OldLocation) / GetWorld()->GetDeltaSeconds());
+	//GetOwner()->GetParentActor()->FindComponentByClass(Grapple);
+
+	
+	auto HitActorName = Other->GetName();
+	//////////////////////////////////////////////////////////////////////////
+	
+	UWorld* world = GetWorld();
+	ALandscape* landscape = nullptr;
+	if (world != nullptr) {
+		// Find the active landscape
+		TActorIterator<ALandscape> landscapeIterator(world);
+		landscape = *landscapeIterator;
+	}
+	FString lsName = landscape->GetName();
+	if (landscape != nullptr)
+	{
+		//landscape->LandscapeMaterial->GetName();
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *lsName);
+	}
+	
+	
+	
+	
+	
+	
+	
+	//ALandscape* landscapeclass = nullptr;
+	//landscapeclass = GetParentActor()->GetClass();
+	//if (Other->GetActorClass()->IsA(Landscape::StaticClass());//  landscapeclass::StaticClass())
+	//{ 
+	//	UE_LOG(LogTemp, Warning, TEXT("%s"), *lsName);
+//	}
+	
+	//////////////////////////////////////////////////////////////////////////
+	//auto ECCIsStatic = Hit.GetActor()->GetComponentsCollisionResponseToChannel(ECollisionChannel::ECC_WorldStatic);
+	//auto HitActor = Hit.GetActor();
+	
+	
+		
+	
+	/*
+	if (Hit.GetActor()->GetComponentsCollisionResponseToChannel(ECollisionChannel::ECC_WorldStatic))
+	{
+		//if (GetHName != landscape)
+		{
+			SetActorRotation(FQuat::Slerp(CurrentRotation.Quaternion(), HitNormal.ToOrientationQuat(), 0.025f));
+		}
+	}
+	*/
+
 }
 
+//////////////////////////////////////////////////////////////////////////
 
+
+//////////////////////////////////////////////////////////////////////////
+
+const FHitResult ARKTPawn::GetFirstPhysicsBodyInReach()
+{
+
+	FVector PlayerViewPointLocation = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation();
+	FRotator PlayerViewPointRotation = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorRotation();
+	FVector PlayerView = PlayerViewPointLocation + PlayerViewPointRotation.Vector();
+	/// Line Trace
+	FHitResult HitResult;
+	FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner());
+	GetWorld()->LineTraceSingleByObjectType(
+		OUT HitResult,
+		PlayerViewPointLocation,
+		PlayerView,
+		FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody),
+		TraceParameters
+	);
+	return HitResult;
+}
+//////////////////////////////////////////////////////////////////////////
 void ARKTPawn::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
 	check(PlayerInputComponent);
@@ -115,12 +239,20 @@ void ARKTPawn::SetupPlayerInputComponent(class UInputComponent* PlayerInputCompo
 	//
 }
 
+
+///NEW Movement Component
+UPawnMovementComponent* ARKTPawn::GetMovementComponent() const
+{
+	return RKTMovementComponent;
+}
+
+
 void ARKTPawn::ThrustInput(float Val)
 {
 	// Is there no input?
 	bool bHasInput = !FMath::IsNearlyEqual(Val, 0.f);
 	// If input is not held down, reduce speed
-	float CurrentAcc = bHasInput ? (Val * Acceleration) : (-0.5f * Acceleration);
+	float CurrentAcc = bHasInput ? (Val * Acceleration) : (-0.1f * Acceleration);
 	// Calculate new speed
 	float NewForwardSpeed = CurrentForwardSpeed + (GetWorld()->GetDeltaSeconds() * CurrentAcc);
 	// Clamp between MinSpeed and MaxSpeed
@@ -129,18 +261,25 @@ void ARKTPawn::ThrustInput(float Val)
 
 void ARKTPawn::MoveUpInput(float Val)
 {
+	
+	bool bHasInput = !FMath::IsNearlyEqual(Val, 0.f);
+	
+	
+
 	// Target pitch speed is based in input
-	float TargetPitchSpeed = (Val * TurnSpeed * -1.f);
+	float TargetPitchSpeed = bHasInput ? (Val * TurnSpeed) : (GetActorRotation().Pitch * -2.f);
 
 	// When steering, we decrease pitch slightly
-	TargetPitchSpeed += (FMath::Abs(CurrentYawSpeed) * -0.2f);
+	//TargetPitchSpeed += (FMath::Abs(CurrentYawSpeed));// * -0.2f);
 
 	// Smoothly interpolate to target pitch speed
 	CurrentPitchSpeed = FMath::FInterpTo(CurrentPitchSpeed, TargetPitchSpeed, GetWorld()->GetDeltaSeconds(), 2.f);
+	
 }
 
 void ARKTPawn::MoveRightInput(float Val)
 {
+	
 	// Target yaw speed is based on input
 	float TargetYawSpeed = (Val * TurnSpeed);
 
@@ -155,6 +294,7 @@ void ARKTPawn::MoveRightInput(float Val)
 	///ROLL constrained min, max = 0
 	float TargetRollSpeed = bIsTurning ? (CurrentYawSpeed * 0.5f) : (GetActorRotation().Roll * -2.f);
 
-	// Smoothly interpolate roll speed
-	CurrentRollSpeed = FMath::FInterpTo(CurrentRollSpeed, TargetRollSpeed, GetWorld()->GetDeltaSeconds(), 2.f);
+	// Smoothly interpolate to target roll speed
+	//CurrentRollSpeed = FMath::FInterpTo(CurrentRollSpeed, TargetRollSpeed, GetWorld()->GetDeltaSeconds(), 2.f);
+	
 }

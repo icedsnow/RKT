@@ -5,7 +5,6 @@
 #include "Components/ActorComponent.h"
 #include "RKTPawn.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
-#include "CableComponent.h"
 #include "Grapple.generated.h"
 
 

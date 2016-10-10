@@ -23,13 +23,22 @@ class RKT_API ARKTPawn : public APawn
 
 public:
 
-
+	// Sets default values for this pawn's properties
+	ARKTPawn();
 	// Begin AActor overrides
 	virtual void Tick(float DeltaSeconds) override;
 	virtual void NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other, class UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit) override;
 	// End AActor overrides
 
+	//class URKTFloatingPawnMovement* RKTMovementComponent;
+	class URKTFloatingPawnMovement* RKTMovementComponent;
+
+	virtual UPawnMovementComponent* GetMovementComponent() const override;
+
+
 protected:
+
+	const FHitResult GetFirstPhysicsBodyInReach();
 
 	// Begin APawn overrides
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override; // Allows binding actions/axes to functions
@@ -44,44 +53,49 @@ protected:
 	/** Bound to the horizontal axis */
 	void MoveRightInput(float Val);
 
+
+
 private:
 
 	///NEW
-	// Sets default values for this pawn's properties
-	ARKTPawn();
+	
 
 	/** How quickly forward speed changes */
-	UPROPERTY(Category= Rocket, EditAnywhere)
-	float Acceleration;
+	UPROPERTY(Category = Rocket, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		float Acceleration;
+
+	UPROPERTY(Category = Rocket, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		FVector Velocity;
 
 	/** How quickly pawn can steer */
-	UPROPERTY(Category= Rocket, EditAnywhere)
-	float TurnSpeed;
+	UPROPERTY(Category = Rocket, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		float TurnSpeed;
 
 	/** Max forward speed */
-	UPROPERTY(Category = Pitch, EditAnywhere)
-	float MaxSpeed;
+	UPROPERTY(Category = Rocket, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		float MaxSpeed;
 
 	/** Min forward speed */
-	UPROPERTY(Category=Yaw, EditAnywhere)
-	float MinSpeed;
+	UPROPERTY(Category = Rocket, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		float MinSpeed;
 
 	///**********MAXPITCH
-	UPROPERTY(Category = Pitch, EditAnywhere)
-	float MaxPitch;
+	UPROPERTY(Category = Pitch, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		float MaxPitch;
 
-	UPROPERTY(Category = Pitch, EditAnywhere)
-	float MinPitch;
-	
+	UPROPERTY(Category = Pitch, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		float MinPitch;
+
 	///**********CONSTRAIN ROLL
-	UPROPERTY(Category = Roll, EditAnywhere)
-	float MaxRoll;
+	UPROPERTY(Category = Rocket, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		float MaxRoll;
 
-	UPROPERTY(Category = Roll, EditAnywhere)
-	float MinRoll;
-	
+	UPROPERTY(Category = Rocket, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		float MinRoll;
+
 	/** Current forward speed */
-	float CurrentForwardSpeed;
+	UPROPERTY(Category = Rocket, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		float CurrentForwardSpeed;
 
 	/** Current yaw speed */
 	float CurrentYawSpeed;
@@ -91,6 +105,7 @@ private:
 
 	/** Current roll speed */
 	float CurrentRollSpeed;
+	
 	
 
 public:

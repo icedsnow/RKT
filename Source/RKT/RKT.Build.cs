@@ -11,5 +11,7 @@ public class RKT : ModuleRules
         PrivateDependencyModuleNames.AddRange(new string[] { "CableComponent" });
 
         PublicIncludePaths.AddRange(new string[] { "CableComponent/Public", "CableComponent/Classes" });
+
+        PublicDependencyModuleNames.AddRange(new string[] { "Landscape" });
     }
 }
