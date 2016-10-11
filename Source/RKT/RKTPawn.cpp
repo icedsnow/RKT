@@ -160,6 +160,7 @@ void ARKTPawn::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other,
 	
 	UWorld* world = GetWorld();
 	ALandscape* landscape = nullptr;
+	UClass* HitPtr = nullptr;
 	if (world != nullptr) {
 		// Find the active landscape
 		TActorIterator<ALandscape> landscapeIterator(world);
@@ -168,11 +169,27 @@ void ARKTPawn::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other,
 	FString lsName = landscape->GetName();
 	if (landscape != nullptr)
 	{
+		HitPtr = Other->GetClass();
+		if (HitPtr == landscape->GetClass())
+		{
+			//UE_LOG(LogTemp, Warning, TEXT("%s"), *lsName);
+			AddActorLocalOffset(HitNormal * 5);
+		}
+		else
+		{
+			SetActorRotation(FQuat::Slerp(CurrentRotation.Quaternion(), HitNormal.ToOrientationQuat(), 0.025f));
+		}
 		//landscape->LandscapeMaterial->GetName();
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *lsName);
+		
 	}
-	
-	
+	//ALandscape* LandscapeClassPTR = nullptr;
+	//LandscapeClassPTR->SetClass(landscape->GetClass()); //landscape->GetClass();
+	/*
+	if (Hit.Actor->IsA(landscape))
+	{
+
+	}
+	*/
 	
 	
 	
