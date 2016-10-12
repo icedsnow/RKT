@@ -7,6 +7,7 @@
 #include "RKTFloatingPawnMovement.h"
 #include "EngineUtils.h"
 #include "Engine/EngineTypes.h"
+//#include "PhysicsVolume.generated.h"
 
 
 ARKTPawn::ARKTPawn()
@@ -152,6 +153,7 @@ void ARKTPawn::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other,
 	//Update Velocity
 	const FVector NewLocation = RootComponent->GetComponentLocation();
 	Velocity = ((NewLocation - OldLocation) / GetWorld()->GetDeltaSeconds());
+	FVector Delta = Velocity * GetWorld()->GetDeltaSeconds();
 	//GetOwner()->GetParentActor()->FindComponentByClass(Grapple);
 
 	
@@ -160,11 +162,17 @@ void ARKTPawn::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other,
 	
 	UWorld* world = GetWorld();
 	ALandscape* landscape = nullptr;
+	AVolume* ceiling = nullptr;
 	UClass* HitPtr = nullptr;
+	FHitResult SlideHit = Hit;
 	if (world != nullptr) {
 		// Find the active landscape
 		TActorIterator<ALandscape> landscapeIterator(world);
 		landscape = *landscapeIterator;
+
+		//Find the active blocking volume for ceiling
+		TActorIterator<AVolume> physicsvolumeIterator(world);
+		ceiling = *physicsvolumeIterator;
 	}
 	FString lsName = landscape->GetName();
 	if (landscape != nullptr)
@@ -175,9 +183,20 @@ void ARKTPawn::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other,
 			//UE_LOG(LogTemp, Warning, TEXT("%s"), *lsName);
 			AddActorLocalOffset(HitNormal * 5);
 		}
+	
+		//	AddActorLocalOffset((HitNormal * 5) * -1);
+		
 		else
 		{
-			SetActorRotation(FQuat::Slerp(CurrentRotation.Quaternion(), HitNormal.ToOrientationQuat(), 0.025f));
+			if (HitPtr == ceiling->GetClass())
+			{
+				
+			}
+			else
+			{
+				SetActorRotation(FQuat::Slerp(CurrentRotation.Quaternion(), HitNormal.ToOrientationQuat(), 0.025f));
+			}
+			
 		}
 		//landscape->LandscapeMaterial->GetName();
 		
