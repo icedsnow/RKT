@@ -181,7 +181,7 @@ void ARKTPawn::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other,
 		if (HitPtr == landscape->GetClass())
 		{
 			//UE_LOG(LogTemp, Warning, TEXT("%s"), *lsName);
-			AddActorLocalOffset(HitNormal * 5);
+			AddActorLocalOffset(HitNormal * 10);
 		}
 	
 		//	AddActorLocalOffset((HitNormal * 5) * -1);
@@ -194,7 +194,7 @@ void ARKTPawn::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other,
 			}
 			else
 			{
-				SetActorRotation(FQuat::Slerp(CurrentRotation.Quaternion(), HitNormal.ToOrientationQuat(), 0.025f));
+				SetActorRotation(FQuat::Slerp(CurrentRotation.Quaternion(), HitNormal.ToOrientationQuat(), 0.05f));
 			}
 			
 		}
@@ -245,25 +245,12 @@ void ARKTPawn::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other,
 
 //////////////////////////////////////////////////////////////////////////
 
-const FHitResult ARKTPawn::GetFirstPhysicsBodyInReach()
-{
 
-	FVector PlayerViewPointLocation = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation();
-	FRotator PlayerViewPointRotation = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorRotation();
-	FVector PlayerView = PlayerViewPointLocation + PlayerViewPointRotation.Vector();
-	/// Line Trace
-	FHitResult HitResult;
-	FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner());
-	GetWorld()->LineTraceSingleByObjectType(
-		OUT HitResult,
-		PlayerViewPointLocation,
-		PlayerView,
-		FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody),
-		TraceParameters
-	);
-	return HitResult;
+///NEW Movement Component
+UPawnMovementComponent* ARKTPawn::GetMovementComponent() const
+{
+	return RKTMovementComponent;
 }
-//////////////////////////////////////////////////////////////////////////
 void ARKTPawn::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
 	check(PlayerInputComponent);
@@ -272,16 +259,7 @@ void ARKTPawn::SetupPlayerInputComponent(class UInputComponent* PlayerInputCompo
 	PlayerInputComponent->BindAxis("Thrust", this, &ARKTPawn::ThrustInput);
 	PlayerInputComponent->BindAxis("MoveUp", this, &ARKTPawn::MoveUpInput);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ARKTPawn::MoveRightInput);
-	//
 }
-
-
-///NEW Movement Component
-UPawnMovementComponent* ARKTPawn::GetMovementComponent() const
-{
-	return RKTMovementComponent;
-}
-
 
 void ARKTPawn::ThrustInput(float Val)
 {

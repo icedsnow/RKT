@@ -6,6 +6,8 @@
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "DrawDebugHelpers.h"
 #include "EngineGlobals.h"
+#include <EngineUtils.h>
+#include "ConstructorHelpers.h"
 
 #define OUT // Does nothing, Defines for reader that line changes value somewhere
 
@@ -17,7 +19,24 @@ UGrapple::UGrapple()
 	bWantsBeginPlay = true;
 	PrimaryComponentTick.bCanEverTick = true;
 
-	// ...
+// 
+// 
+// 	struct FConstructorStatics
+// 	{
+// 		ConstructorHelpers::FObjectFinderOptional<UBlueprint> GrappleBP;
+// 		FConstructorStatics()
+// 			: GrappleBP(TEXT("Blueprint'/Game/BP/Grapple_BP.Grapple_BP_C'"))
+// 		{
+// 		}
+// 	};
+// 	static FConstructorStatics ConstructorStatics;
+// 	
+// 	GrappleBP = CreateDefaultSubobject<UBlueprint>(TEXT("Grapple0"));
+// 	
+
+// 	RocketMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RocketMesh0"));
+// 	RocketMesh->SetStaticMesh(ConstructorStatics.RocketMesh.Get());
+// 	RootComponent = RocketMesh;
 }
 
 
@@ -38,16 +57,6 @@ void UGrapple::TickComponent( float DeltaTime, ELevelTick TickType, FActorCompon
 	Super::TickComponent( DeltaTime, TickType, ThisTickFunction );
 
 	if (!PhysicsHandle) { return; }
-	// if the physics handle is attached
-	if (PhysicsHandle->GrabbedComponent)
-	{
-		// move the object that we're holding
-		PhysicsHandle->SetTargetLocation(GetReachLineEnd());
-	}
-	/*
-		DrawDebugLine(GetWorld(), GetReachLineStart(), GetReachLineEnd(), FColor(255, 0, 0), false,	0.f, 0.f, 50.f);
-	*/
-	
 }
 
 
@@ -82,66 +91,41 @@ void UGrapple::FindPhysicsHandleComponent()
 
 void UGrapple::Grab()
 {
-	/// Line trace - Try to reach any actors with physics body collision channel set
-	auto HitResult = GetFirstPhysicsBodyInReach();
-	auto ComponentToGrab = HitResult.GetComponent();
-	auto ActorHit = HitResult.GetActor();
-	auto GettingParentAct = GetWorld()->GetFirstPlayerController()->GetPawn()->GetParentActor();//FindComponentByClass<UCableComponent>();
-	if (ActorHit)
-	{
-		if (!PhysicsHandle) { return; }
-		PhysicsHandle->GrabComponent(
-			ComponentToGrab,
-			NAME_None,
-			ComponentToGrab->GetOwner()->GetActorLocation(), true);
-	}
+
+	
+ 
+  	FVector SpawnLocation = FVector(0.f,0.f,0.f);
+  	FRotator SpawnRotation = FRotator(0.f, 0.f, 0.f);
+  	UWorld* const World = GetWorld();
+// 	
+// 	
+
+
+
+
+ 	//static ConstructorHelpers::FObjectFinder<UBlueprint> GrappleBP(TEXT("Blueprint'/Game/BP/Grapple_BP.Grapple_BP_C'"));
+ 	if (World)
+ 	{
+			
+	//	World->SpawnActor<AActor>(UGrapple::StaticClass(), SpawnLocation, SpawnRotation);
+
+ 		UE_LOG(LogTemp, Warning, TEXT("Something Happened"));
+
+ 	}
+	
+//UBlueprint* SpawnedBP = SpawnBP<UBlueprint>(GetWorld(), GrappleBP, SpawnLocation, SpawnRotation); //bad
+//	AActor* SpawnedBP = SpawnBP<AActor>(GetWorld(), BPSpawning, SpawnLocation, SpawnRotation);
+
+// 	static ConstructorHelpers::FClassFinder<AActor> ThisResource(TEXT("/Game/BP/Grapple_BP"));
+// 	if (ThisResource.Class != NULL)
+// 	{
+// 		UClass* GrappleBP = ThisResource.Class;
+// 		AActor* GrappleSpawn = World->SpawnActor<AActor>(GrappleBP, SpawnLocation, SpawnRotation);
+// 	}
+	//UE_LOG(LogTemp, Warning, TEXT("Something Happened"));
+	//
 }
 
 void UGrapple::Release()
 {
-	if (!PhysicsHandle) { return; }
-	PhysicsHandle->ReleaseComponent();
-}
-
-const FHitResult UGrapple::GetFirstPhysicsBodyInReach()
-{
-	/// Line Trace
-	FHitResult HitResult;
-	FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner());
-	GetWorld()->LineTraceSingleByObjectType(
-		OUT HitResult,
-		GetReachLineStart(),
-		GetReachLineEnd(),
-		FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody),
-		TraceParameters
-	);
-	return HitResult;
-}
-
-FVector UGrapple::GetReachLineStart()
-{
-	
-	//FVector PlayerViewPointLocation;
-	
-	//FVector GetActorLocation();
-	FVector PlayerViewPointLocation = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation();
-	
-	return PlayerViewPointLocation;
-}
-
-FVector UGrapple::GetReachLineEnd()
-{
-	/*
-	FVector PlayerViewPointLocation;
-	FRotator PlayerViewPointRotation;
-	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(
-		OUT    PlayerViewPointLocation,
-		OUT    PlayerViewPointRotation
-	);
-	*/
-	FVector PlayerViewPointLocation = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation();
-	FRotator PlayerViewPointRotation = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorRotation();
-	
-	//return PlayerViewPointLocation * Reach;
-	return PlayerViewPointLocation + PlayerViewPointRotation.Vector() * Reach;
 }

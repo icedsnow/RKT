@@ -39,14 +39,6 @@ private:
 	// Setup attached input component
 	void SetupInputComponent();
 
-	// Return hit for first physics body in reach
-	const FHitResult GetFirstPhysicsBodyInReach();
-
-	// Returns start of reach line
-	FVector GetReachLineStart();
-	// Returns current end of reach line
-	FVector GetReachLineEnd();
-
 
 
 protected:
@@ -58,5 +50,49 @@ protected:
 
 
 public:
+// 	
+// 	TSubclassOf<UBlueprint> GrappleBP;
 
+///Spawn Grapple, Hopefully
+// 	UPROPERTY(Category = Grapple, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+// 		TSubclassOf<class UGrapple> GrappleBP;
+		
+		//class UBlueprint* GrappleBP;
+
+	//FORCEINLINE class UBlueprint* GetGrappleBP() const { return GrappleBP; }
+
+
+
+
+
+
+	//SpawnActor from blueprint
+// 	template <typename ASpawnBP>
+// 	FORCEINLINE ASpawnBP* SpawnBP(
+// 		UWorld* TheWorld,
+// 		UClass* TheBP,
+// 		const FVector& Loc,
+// 		const FRotator& Rot,
+// 		const bool bNoCollisionFail = true,
+// 		AActor* Owner = NULL,
+// 		APawn* Instigator = NULL
+// 	)
+// 	{
+// 		if (!TheWorld) return NULL;
+// 		if (!TheBP) return NULL;
+// 		//~~~~~~~~~~~
+// 
+// 		FActorSpawnParameters SpawnInfo;
+// 		SpawnInfo.bNoCollisionFail = bNoCollisionFail;
+// 		SpawnInfo.Owner = Owner;
+// 		SpawnInfo.Instigator = Instigator;
+// 		SpawnInfo.bDeferConstruction = false;
+// 
+// 		return TheWorld->SpawnActor<ASpawnBP>(TheBP, Loc, Rot, SpawnInfo);
+// 	}
+
+
+
+
+	
 };
