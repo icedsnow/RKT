@@ -181,7 +181,7 @@ void ARKTPawn::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other,
 		if (HitPtr == landscape->GetClass())
 		{
 			//UE_LOG(LogTemp, Warning, TEXT("%s"), *lsName);
-			AddActorLocalOffset(HitNormal * 10);
+	//		AddActorLocalOffset(HitNormal * 10);
 		}
 	
 		//	AddActorLocalOffset((HitNormal * 5) * -1);
@@ -194,7 +194,7 @@ void ARKTPawn::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other,
 			}
 			else
 			{
-				SetActorRotation(FQuat::Slerp(CurrentRotation.Quaternion(), HitNormal.ToOrientationQuat(), 0.05f));
+	//			SetActorRotation(FQuat::Slerp(CurrentRotation.Quaternion(), HitNormal.ToOrientationQuat(), 0.05f));
 			}
 			
 		}
