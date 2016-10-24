@@ -7,6 +7,9 @@
 #include "RKTFloatingPawnMovement.h"
 #include "EngineUtils.h"
 #include "Engine/EngineTypes.h"
+#include "GameFramework/PhysicsVolume.h"
+#include "Runtime/Engine/Classes/Components/PrimitiveComponent.h"
+//#include "Runtime/Engine/Classes/Components/PrimitiveComponent.h"
 //#include "PhysicsVolume.generated.h"
 
 
@@ -162,7 +165,7 @@ void ARKTPawn::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other,
 	
 	UWorld* world = GetWorld();
 	ALandscape* landscape = nullptr;
-	AVolume* ceiling = nullptr;
+	APhysicsVolume* ceiling = nullptr;
 	UClass* HitPtr = nullptr;
 	FHitResult SlideHit = Hit;
 	if (world != nullptr) {
@@ -171,36 +174,45 @@ void ARKTPawn::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other,
 		landscape = *landscapeIterator;
 
 		//Find the active blocking volume for ceiling
-		TActorIterator<AVolume> physicsvolumeIterator(world);
+		TActorIterator<APhysicsVolume> physicsvolumeIterator(world);
 		ceiling = *physicsvolumeIterator;
 	}
 	FString lsName = landscape->GetName();
+	FString ceilingname = ceiling->GetName();
 	if (landscape != nullptr)
 	{
 		HitPtr = Other->GetClass();
 		if (HitPtr == landscape->GetClass())
 		{
-			//UE_LOG(LogTemp, Warning, TEXT("%s"), *lsName);
+			UE_LOG(LogTemp, Warning, TEXT("%s"), *lsName);
 	//		AddActorLocalOffset(HitNormal * 10);
 		}
-	
-		//	AddActorLocalOffset((HitNormal * 5) * -1);
-		
-		else
+		if (ceiling != nullptr)
 		{
 			if (HitPtr == ceiling->GetClass())
 			{
-				
+				UE_LOG(LogTemp, Warning, TEXT("%s"), *ceilingname);
 			}
-			else
+			else if (HitPtr != ceiling->GetClass() && HitPtr != landscape->GetClass())
 			{
-	//			SetActorRotation(FQuat::Slerp(CurrentRotation.Quaternion(), HitNormal.ToOrientationQuat(), 0.05f));
+				SetActorRotation(FQuat::Slerp(CurrentRotation.Quaternion(), HitNormal.ToOrientationQuat(), 0.05f));
+				UE_LOG(LogTemp, Warning, TEXT("rotating..."));
+				FVector LinVelocity = FVector(0.f, 0.f, 0.f);
+				//SetPhysicsLinearVelocity(LinVelocity, false);
+				//SetSimulatePhysics();
+			//	SetSimulatePhysics();
 			}
-			
 		}
+	}
+		//	AddActorLocalOffset((HitNormal * 5) * -1);
+
+
+			
+ 			
+ 			
 		//landscape->LandscapeMaterial->GetName();
 		
-	}
+
 	//ALandscape* LandscapeClassPTR = nullptr;
 	//LandscapeClassPTR->SetClass(landscape->GetClass()); //landscape->GetClass();
 	/*
