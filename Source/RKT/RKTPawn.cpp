@@ -195,7 +195,7 @@ void ARKTPawn::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other,
 			}
 			else if (HitPtr != ceiling->GetClass() && HitPtr != landscape->GetClass())
 			{
-				SetActorRotation(FQuat::Slerp(CurrentRotation.Quaternion(), HitNormal.ToOrientationQuat(), 0.05f));
+				SetActorRotation(FQuat::Slerp(CurrentRotation.Quaternion(), HitNormal.ToOrientationQuat(), 0.075f));
 			///	UE_LOG(LogTemp, Warning, TEXT("rotating..."));
 				FVector LinVelocity = FVector(0.f, 0.f, 0.f);
 				//SetPhysicsLinearVelocity(LinVelocity, false);
