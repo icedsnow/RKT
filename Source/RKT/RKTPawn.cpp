@@ -8,9 +8,7 @@
 #include "EngineUtils.h"
 #include "Engine/EngineTypes.h"
 #include "GameFramework/PhysicsVolume.h"
-#include "Runtime/Engine/Classes/Components/PrimitiveComponent.h"
-//#include "Runtime/Engine/Classes/Components/PrimitiveComponent.h"
-//#include "PhysicsVolume.generated.h"
+
 
 
 ARKTPawn::ARKTPawn()
@@ -69,6 +67,8 @@ ARKTPawn::ARKTPawn()
 	RKTMovementComponent = CreateDefaultSubobject<URKTFloatingPawnMovement>(TEXT("CustomMovementComponent"));
 	RKTMovementComponent->UpdatedComponent = RootComponent;
 
+
+	
 }
 
 void ARKTPawn::Tick(float DeltaSeconds)
@@ -184,22 +184,27 @@ void ARKTPawn::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other,
 		HitPtr = Other->GetClass();
 		if (HitPtr == landscape->GetClass())
 		{
-			UE_LOG(LogTemp, Warning, TEXT("%s"), *lsName);
+		///	UE_LOG(LogTemp, Warning, TEXT("%s"), *lsName);
 	//		AddActorLocalOffset(HitNormal * 10);
 		}
 		if (ceiling != nullptr)
 		{
 			if (HitPtr == ceiling->GetClass())
 			{
-				UE_LOG(LogTemp, Warning, TEXT("%s"), *ceilingname);
+			///	UE_LOG(LogTemp, Warning, TEXT("%s"), *ceilingname);
 			}
 			else if (HitPtr != ceiling->GetClass() && HitPtr != landscape->GetClass())
 			{
 				SetActorRotation(FQuat::Slerp(CurrentRotation.Quaternion(), HitNormal.ToOrientationQuat(), 0.05f));
-				UE_LOG(LogTemp, Warning, TEXT("rotating..."));
+			///	UE_LOG(LogTemp, Warning, TEXT("rotating..."));
 				FVector LinVelocity = FVector(0.f, 0.f, 0.f);
 				//SetPhysicsLinearVelocity(LinVelocity, false);
-				//SetSimulatePhysics();
+				//Bug Fix, smooths physics after hit takes place
+				RocketMesh->SetSimulatePhysics(false);
+				if (RocketMesh)
+				{
+					RocketMesh->SetSimulatePhysics(true);
+				}
 			//	SetSimulatePhysics();
 			}
 		}

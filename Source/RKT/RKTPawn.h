@@ -108,6 +108,7 @@ private:
 	float CurrentRollSpeed;
 	
 	
+	
 
 public:
 	/** Returns RocketMesh subobject **/
