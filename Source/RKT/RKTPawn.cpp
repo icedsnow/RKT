@@ -11,6 +11,8 @@
 
 
 
+
+
 ARKTPawn::ARKTPawn()
 {
 	///New
@@ -123,6 +125,7 @@ void ARKTPawn::Tick(float DeltaSeconds)
 
 }
 
+
 void ARKTPawn::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other, class UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit)
 {
 
@@ -164,6 +167,7 @@ void ARKTPawn::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other,
 	//////////////////////////////////////////////////////////////////////////
 	
 	UWorld* world = GetWorld();
+	UStaticMesh* StaticMeshPtr = nullptr;
 	ALandscape* landscape = nullptr;
 	APhysicsVolume* ceiling = nullptr;
 	UClass* HitPtr = nullptr;
@@ -193,22 +197,28 @@ void ARKTPawn::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other,
 			{
 			///	UE_LOG(LogTemp, Warning, TEXT("%s"), *ceilingname);
 			}
-			else if (HitPtr != ceiling->GetClass() && HitPtr != landscape->GetClass())
-			{
-				SetActorRotation(FQuat::Slerp(CurrentRotation.Quaternion(), HitNormal.ToOrientationQuat(), 0.075f));
-			///	UE_LOG(LogTemp, Warning, TEXT("rotating..."));
-				FVector LinVelocity = FVector(0.f, 0.f, 0.f);
-				//SetPhysicsLinearVelocity(LinVelocity, false);
-				//Bug Fix, smooths physics after hit takes place
-				RocketMesh->SetSimulatePhysics(false);
-				if (RocketMesh)
-				{
-					RocketMesh->SetSimulatePhysics(true);
-				}
+			//else if (HitPtr != ceiling->GetClass() && HitPtr != landscape->GetClass())
+//  			else if (HitPtr == StaticMeshPtr->)
+// 			{
+// 				
+//  				SetActorRotation(FQuat::Slerp(CurrentRotation.Quaternion(), HitNormal.ToOrientationQuat(), 0.05f));
+// 			///	UE_LOG(LogTemp, Warning, TEXT("rotating..."));
+// 				FVector LinVelocity = FVector(0.f, 0.f, 0.f);
+// 				//SetPhysicsLinearVelocity(LinVelocity, false);
+// 				//Bug Fix, smooths physics after hit takes place
+// 
+// 
+// 				///END
+// 				RocketMesh->SetSimulatePhysics(false);
+// 				if (RocketMesh)
+// 				{
+// 					RocketMesh->SetSimulatePhysics(true);
+// 				}
 			//	SetSimulatePhysics();
-			}
+//			}
 		}
 	}
+
 		//	AddActorLocalOffset((HitNormal * 5) * -1);
 
 
@@ -254,11 +264,19 @@ void ARKTPawn::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other,
 		}
 	}
 	*/
-
+	///CollisionQuat
+	//////////////////////////////////////////////////////////////////////////
+	if (IsCollisionQuat)
+	{
+		SetActorRotation(FQuat::Slerp(CurrentRotation.Quaternion(), HitNormal.ToOrientationQuat(), 0.05f));
+	}
+	if (IsCollisionPole)
+	{
+		SetActorRotation(FQuat::Slerp(CurrentRotation.Quaternion(), HitNormal.ToOrientationQuat(), 0.5f));
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////
-
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -329,3 +347,7 @@ void ARKTPawn::MoveRightInput(float Val)
 	//CurrentRollSpeed = FMath::FInterpTo(CurrentRollSpeed, TargetRollSpeed, GetWorld()->GetDeltaSeconds(), 2.f);
 	
 }
+//////////////////////////////////////////////////////////////////////////
+
+
+

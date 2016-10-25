@@ -22,6 +22,10 @@ class RKT_API ARKTPawn : public APawn
 	UPROPERTY(Category = Camera, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* Camera;
 
+	///NEW
+	
+	
+
 public:
 
 	// Sets default values for this pawn's properties
@@ -58,7 +62,6 @@ protected:
 
 private:
 
-	///NEW
 	
 
 	/** How quickly forward speed changes */
@@ -107,8 +110,10 @@ private:
 	/** Current roll speed */
 	float CurrentRollSpeed;
 	
-	
-	
+	UPROPERTY(Category = Rocket, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	bool IsCollisionQuat = false;
+	UPROPERTY(Category = Rocket, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	bool IsCollisionPole = false;
 
 public:
 	/** Returns RocketMesh subobject **/
