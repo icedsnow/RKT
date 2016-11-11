@@ -36,6 +36,7 @@ public:
 	// End AActor overrides
 
 	//class URKTFloatingPawnMovement* RKTMovementComponent;
+	
 	class URKTFloatingPawnMovement* RKTMovementComponent;
 
 	virtual UPawnMovementComponent* GetMovementComponent() const override;

@@ -130,7 +130,7 @@ void ARKTPawn::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other,
 {
 
 	Super::NotifyHit(MyComp, Other, OtherComp, bSelfMoved, HitLocation, HitNormal, NormalImpulse, Hit);
-	
+	/*
 
 	// Deflect along the surface when we collide. //0.025
 
@@ -251,7 +251,7 @@ void ARKTPawn::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other,
 	//////////////////////////////////////////////////////////////////////////
 	//auto ECCIsStatic = Hit.GetActor()->GetComponentsCollisionResponseToChannel(ECollisionChannel::ECC_WorldStatic);
 	//auto HitActor = Hit.GetActor();
-	
+
 	
 		
 	
@@ -266,6 +266,7 @@ void ARKTPawn::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other,
 	*/
 	///CollisionQuat
 	//////////////////////////////////////////////////////////////////////////
+	/*
 	if (IsCollisionQuat)
 	{
 		SetActorRotation(FQuat::Slerp(CurrentRotation.Quaternion(), HitNormal.ToOrientationQuat(), 0.05f));
@@ -274,6 +275,11 @@ void ARKTPawn::NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other,
 	{
 		SetActorRotation(FQuat::Slerp(CurrentRotation.Quaternion(), HitNormal.ToOrientationQuat(), 0.5f));
 	}
+
+	*/
+
+
+
 }
 
 //////////////////////////////////////////////////////////////////////////
