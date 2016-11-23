@@ -20,7 +20,7 @@ ARKTPawn::ARKTPawn()
 	PrimaryActorTick.bCanEverTick = true;
 
 	// Structure to hold one-time initialization
-	
+	/*
 	struct FConstructorStatics
 	{
 		ConstructorHelpers::FObjectFinderOptional<UStaticMesh> RocketMesh;
@@ -48,7 +48,7 @@ ARKTPawn::ARKTPawn()
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera0"));
 	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
 	Camera->bUsePawnControlRotation = false; // Don't rotate camera with controller
-
+	*/
 	// Set handling parameters
 	Acceleration = 500.f;
 	TurnSpeed = 50.f;
@@ -93,28 +93,36 @@ void ARKTPawn::Tick(float DeltaSeconds)
 	const float MinDeltaRoll = MinRoll - OldRoll;
 	const float MaxDeltaRoll = MaxRoll - OldRoll;
 	
+	///NEW
+
+	//False if no input or nearly zero
+	//bool bHasInput = !FMath::IsNearlyEqual(MoveUpAxisValue, 0.f);
+
+	///NEW
+
+
 
 	// Calculate change in rotation this frame
 	FRotator DeltaRotation(0,0,0);
 	//OLD
 	//DeltaRotation.Pitch = CurrentPitchSpeed * DeltaSeconds;
 	///
-	
+	///test other interp formulas
 	DeltaRotation.Pitch = FMath::ClampAngle(CurrentPitchSpeed * DeltaSeconds, MinDeltaPitch, MaxDeltaPitch);
+
 	//Yaw doesn't need clamp constraint
 	DeltaRotation.Yaw = CurrentYawSpeed * DeltaSeconds;
-
 
 	///DeltaRotation.Roll = CurrentRollSpeed * DeltaSeconds;
 	
 	DeltaRotation.Roll = FMath::ClampAngle(CurrentRollSpeed * DeltaSeconds, MinDeltaRoll, MaxDeltaRoll);
-	
+	//DeltaRotation.Roll = 0.f;
 	// Rotate Rocket
 	//AddActorL(DeltaLocation);
-
+	///can the same thing be achieved without rotations? second interp formula?
 	AddActorLocalRotation(DeltaRotation);
-
-
+	///Find out why roll gives a number, even when zero roll happens much more extreme
+	//UE_LOG(LogTemp, Warning, TEXT("Pitch: %f, Yaw: %f, Roll: %f"), DeltaRotation.Pitch, DeltaRotation.Yaw, DeltaRotation.Roll);
 
 	
 
@@ -316,20 +324,30 @@ void ARKTPawn::ThrustInput(float Val)
 
 void ARKTPawn::MoveUpInput(float Val)
 {
+	//Set variable to read Axis Value Val
+	MoveUpAxisValue = Val;
 	
+	//False if no input or nearly zero
 	bool bHasInput = !FMath::IsNearlyEqual(Val, 0.f);
 	
 	
 
-	// Target pitch speed is based in input
+	// Target pitch speed is based in input 
+	// Everything after ? = true, Everything after : = False
+	///float TargetPitchSpeed = bHasInput ? (Val * TurnSpeed) : (GetActorRotation().Pitch * -2.f);
 	float TargetPitchSpeed = bHasInput ? (Val * TurnSpeed) : (GetActorRotation().Pitch * -2.f);
+
+
 
 	// When steering, we decrease pitch slightly
 	//TargetPitchSpeed += (FMath::Abs(CurrentYawSpeed));// * -0.2f);
 
 	// Smoothly interpolate to target pitch speed
 	CurrentPitchSpeed = FMath::FInterpTo(CurrentPitchSpeed, TargetPitchSpeed, GetWorld()->GetDeltaSeconds(), 2.f);
+	///InterpEaseOut seems nice - First Pass
 	
+		
+	//UE_LOG(LogTemp, Warning, TEXT("Pitch: %f"), CurrentPitchSpeed);
 }
 
 void ARKTPawn::MoveRightInput(float Val)

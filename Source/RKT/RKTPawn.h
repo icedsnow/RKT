@@ -11,16 +11,16 @@ class RKT_API ARKTPawn : public APawn
 	GENERATED_BODY()
 
 	/** StaticMesh component that will be the visuals for our flying pawn */
-	UPROPERTY(Category = Mesh, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	class UStaticMeshComponent* RocketMesh;
+//	UPROPERTY(Category = Mesh, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+//	class UStaticMeshComponent* RocketMesh;
 
 	/** Spring arm that will offset the camera */
-	UPROPERTY(Category = Camera, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	class USpringArmComponent* SpringArm;
+//	UPROPERTY(Category = Camera, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+//	class USpringArmComponent* SpringArm;
 
 	/** Camera component that will be our viewpoint */
-	UPROPERTY(Category = Camera, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	class UCameraComponent* Camera;
+//	UPROPERTY(Category = Camera, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+//	class UCameraComponent* Camera;
 
 	///NEW
 	
@@ -98,9 +98,16 @@ private:
 	UPROPERTY(Category = Rocket, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		float MinRoll;
 
+
+
 	/** Current forward speed */
 	UPROPERTY(Category = Rocket, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		float CurrentForwardSpeed;
+
+	///NEW - Expose Move Up axis value, if used solely through blueprint function is disabled, setting variable here
+	UPROPERTY(Category = Input, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		float MoveUpAxisValue;
+	///NEW
 
 	/** Current yaw speed */
 	float CurrentYawSpeed;
@@ -118,10 +125,10 @@ private:
 
 public:
 	/** Returns RocketMesh subobject **/
-	FORCEINLINE class UStaticMeshComponent* GetRocketMesh() const { return RocketMesh; }
+//	FORCEINLINE class UStaticMeshComponent* GetRocketMesh() const { return RocketMesh; }
 	/** Returns SpringArm subobject **/
-	FORCEINLINE class USpringArmComponent* GetSpringArm() const { return SpringArm; }
+//	FORCEINLINE class USpringArmComponent* GetSpringArm() const { return SpringArm; }
 	/** Returns Camera subobject **/
-	FORCEINLINE class UCameraComponent* GetCamera() const { return Camera; }
+//	FORCEINLINE class UCameraComponent* GetCamera() const { return Camera; }
 
 };
