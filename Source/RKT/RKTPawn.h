@@ -91,6 +91,12 @@ private:
 	UPROPERTY(Category = Pitch, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		float MinPitch;
 
+	UPROPERTY(Category = Pitch, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		float MaxDeltaPitch;
+
+	UPROPERTY(Category = Pitch, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		float MinDeltaPitch;
+
 	///**********CONSTRAIN ROLL
 	UPROPERTY(Category = Rocket, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		float MaxRoll;
@@ -98,6 +104,11 @@ private:
 	UPROPERTY(Category = Rocket, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		float MinRoll;
 
+	UPROPERTY(Category = Pitch, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		float MaxDeltaRoll;
+
+	UPROPERTY(Category = Pitch, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		float MinDeltaRoll;
 
 
 	/** Current forward speed */
@@ -110,13 +121,13 @@ private:
 	///NEW
 
 	/** Current yaw speed */
-	float CurrentYawSpeed;
+	//******float CurrentYawSpeed;
 
 	/** Current pitch speed */
-	float CurrentPitchSpeed;
+	//******float CurrentPitchSpeed;
 
 	/** Current roll speed */
-	float CurrentRollSpeed;
+	//******float CurrentRollSpeed;
 	
 	UPROPERTY(Category = Rocket, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	bool IsCollisionQuat = false;

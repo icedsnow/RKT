@@ -78,20 +78,20 @@ void ARKTPawn::Tick(float DeltaSeconds)
 	// Call any parent class Tick implementation
 	Super::Tick(DeltaSeconds);
 	
-	const FVector LocalMove = FVector(CurrentForwardSpeed * DeltaSeconds, 0.f, 0.f);
+	//******const FVector LocalMove = FVector(CurrentForwardSpeed * DeltaSeconds, 0.f, 0.f);
 
 	// Move Rocket forwards (with sweep so we stop when we collide with things)
-	AddActorLocalOffset(LocalMove, true); //true
+	//******AddActorLocalOffset(LocalMove, true); //true
 	
 	///*********MAXPITCH
 	const float OldPitch = GetActorRotation().Pitch;
-	const float MinDeltaPitch = MinPitch - OldPitch;
-	const float MaxDeltaPitch = MaxPitch - OldPitch;
+	MinDeltaPitch = MinPitch - OldPitch;
+	MaxDeltaPitch = MaxPitch - OldPitch;
 	
 	///********CONSTRAIN ROLL
 	const float OldRoll = GetActorRotation().Roll;
-	const float MinDeltaRoll = MinRoll - OldRoll;
-	const float MaxDeltaRoll = MaxRoll - OldRoll;
+	MinDeltaRoll = MinRoll - OldRoll;
+	MaxDeltaRoll = MaxRoll - OldRoll;
 	
 	///NEW
 
@@ -103,24 +103,24 @@ void ARKTPawn::Tick(float DeltaSeconds)
 
 
 	// Calculate change in rotation this frame
-	FRotator DeltaRotation(0,0,0);
+	//******FRotator DeltaRotation(0,0,0);
 	//OLD
 	//DeltaRotation.Pitch = CurrentPitchSpeed * DeltaSeconds;
 	///
 	///test other interp formulas
-	DeltaRotation.Pitch = FMath::ClampAngle(CurrentPitchSpeed * DeltaSeconds, MinDeltaPitch, MaxDeltaPitch);
+	//******DeltaRotation.Pitch = FMath::ClampAngle(CurrentPitchSpeed * DeltaSeconds, MinDeltaPitch, MaxDeltaPitch);
 
 	//Yaw doesn't need clamp constraint
-	DeltaRotation.Yaw = CurrentYawSpeed * DeltaSeconds;
+	//******DeltaRotation.Yaw = CurrentYawSpeed * DeltaSeconds;
 
 	///DeltaRotation.Roll = CurrentRollSpeed * DeltaSeconds;
 	
-	DeltaRotation.Roll = FMath::ClampAngle(CurrentRollSpeed * DeltaSeconds, MinDeltaRoll, MaxDeltaRoll);
+	//******DeltaRotation.Roll = FMath::ClampAngle(CurrentRollSpeed * DeltaSeconds, MinDeltaRoll, MaxDeltaRoll);
 	//DeltaRotation.Roll = 0.f;
 	// Rotate Rocket
 	//AddActorL(DeltaLocation);
 	///can the same thing be achieved without rotations? second interp formula?
-	AddActorLocalRotation(DeltaRotation);
+	//******AddActorLocalRotation(DeltaRotation);
 	///Find out why roll gives a number, even when zero roll happens much more extreme
 	//UE_LOG(LogTemp, Warning, TEXT("Pitch: %f, Yaw: %f, Roll: %f"), DeltaRotation.Pitch, DeltaRotation.Yaw, DeltaRotation.Roll);
 
@@ -313,13 +313,13 @@ void ARKTPawn::SetupPlayerInputComponent(class UInputComponent* PlayerInputCompo
 void ARKTPawn::ThrustInput(float Val)
 {
 	// Is there no input?
-	bool bHasInput = !FMath::IsNearlyEqual(Val, 0.f);
+	//******	bool bHasInput = !FMath::IsNearlyEqual(Val, 0.f);
 	// If input is not held down, reduce speed
-	float CurrentAcc = bHasInput ? (Val * Acceleration) : (-0.1f * Acceleration);
+	//******	float CurrentAcc = bHasInput ? (Val * Acceleration) : (-0.1f * Acceleration);
 	// Calculate new speed
-	float NewForwardSpeed = CurrentForwardSpeed + (GetWorld()->GetDeltaSeconds() * CurrentAcc);
+	//******float NewForwardSpeed = CurrentForwardSpeed + (GetWorld()->GetDeltaSeconds() * CurrentAcc);
 	// Clamp between MinSpeed and MaxSpeed
-	CurrentForwardSpeed = FMath::Clamp(NewForwardSpeed, MinSpeed, MaxSpeed);
+	//******	CurrentForwardSpeed = FMath::Clamp(NewForwardSpeed, MinSpeed, MaxSpeed);
 }
 
 void ARKTPawn::MoveUpInput(float Val)
@@ -328,14 +328,14 @@ void ARKTPawn::MoveUpInput(float Val)
 	MoveUpAxisValue = Val;
 	
 	//False if no input or nearly zero
-	bool bHasInput = !FMath::IsNearlyEqual(Val, 0.f);
+	//******bool bHasInput = !FMath::IsNearlyEqual(Val, 0.f);
 	
 	
 
 	// Target pitch speed is based in input 
 	// Everything after ? = true, Everything after : = False
 	///float TargetPitchSpeed = bHasInput ? (Val * TurnSpeed) : (GetActorRotation().Pitch * -2.f);
-	float TargetPitchSpeed = bHasInput ? (Val * TurnSpeed) : (GetActorRotation().Pitch * -2.f);
+	//******	float TargetPitchSpeed = bHasInput ? (Val * TurnSpeed) : (GetActorRotation().Pitch * -2.f);
 
 
 
@@ -343,7 +343,7 @@ void ARKTPawn::MoveUpInput(float Val)
 	//TargetPitchSpeed += (FMath::Abs(CurrentYawSpeed));// * -0.2f);
 
 	// Smoothly interpolate to target pitch speed
-	CurrentPitchSpeed = FMath::FInterpTo(CurrentPitchSpeed, TargetPitchSpeed, GetWorld()->GetDeltaSeconds(), 2.f);
+	//******	CurrentPitchSpeed = FMath::FInterpTo(CurrentPitchSpeed, TargetPitchSpeed, GetWorld()->GetDeltaSeconds(), 2.f);
 	///InterpEaseOut seems nice - First Pass
 	
 		
@@ -354,18 +354,18 @@ void ARKTPawn::MoveRightInput(float Val)
 {
 	
 	// Target yaw speed is based on input
-	float TargetYawSpeed = (Val * TurnSpeed);
+	//******	float TargetYawSpeed = (Val * TurnSpeed);
 
 	// Smoothly interpolate to target yaw speed
-	CurrentYawSpeed = FMath::FInterpTo(CurrentYawSpeed, TargetYawSpeed, GetWorld()->GetDeltaSeconds(), 2.f);
+	//******	CurrentYawSpeed = FMath::FInterpTo(CurrentYawSpeed, TargetYawSpeed, GetWorld()->GetDeltaSeconds(), 2.f);
 
 	// Is there any left/right input?
-	const bool bIsTurning = FMath::Abs(Val) > 0.2f;
+	//******	const bool bIsTurning = FMath::Abs(Val) > 0.2f;
 
 	// If turning, yaw value is used to influence roll
 	// If not turning, roll to reverse current roll value
 	///ROLL constrained min, max = 0
-	float TargetRollSpeed = bIsTurning ? (CurrentYawSpeed * 0.5f) : (GetActorRotation().Roll * -2.f);
+	//******float TargetRollSpeed = bIsTurning ? (CurrentYawSpeed * 0.5f) : (GetActorRotation().Roll * -2.f);
 
 	// Smoothly interpolate to target roll speed
 	//CurrentRollSpeed = FMath::FInterpTo(CurrentRollSpeed, TargetRollSpeed, GetWorld()->GetDeltaSeconds(), 2.f);
